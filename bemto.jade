@@ -4,12 +4,19 @@
 
 //- Some global variables
 - var bemto_chain = []
+- var bemto_chain_contexts = ['block']
 
 //- Function for rewriting tag name on different contexts
 - function bemto_check_tag(tag,attributes){
 -   var result = tag || 'div';
+-   var currentContext = bemto_chain_contexts.length;
+-   if (bemto_chain_contexts[currentContext-1] == 'inline') {
+-     result = 'span';
+-     bemto_chain_contexts[currentContext] = 'inline'
+-   }
 -   if (attributes.href) {
 -     result = 'a';
+-     bemto_chain_contexts[currentContext] = 'inline'
 -   }
 -   return result;
 - }
@@ -21,6 +28,7 @@ mixin b(tag)
   #{tag}(attributes)
     block
   - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
+  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
 
 //- Element
 mixin e(tag)
