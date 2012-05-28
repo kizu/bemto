@@ -9,22 +9,24 @@
 //- Function for rewriting tag name on different contexts
 - function bemto_check_tag(tag,attributes){
 -   var result = tag || 'div';
--   var currentContext = bemto_chain_contexts.length;
+-   var contextIndex = bemto_chain_contexts.length;
 -   // Checks for contexts
--   if (bemto_chain_contexts[currentContext-1] == 'inline') {
+-   if (bemto_chain_contexts[contextIndex-1] === 'inline') {
 -     result = 'span'; }
--   if (bemto_chain_contexts[currentContext-1] == 'list') {
+-   if (bemto_chain_contexts[contextIndex-1] === 'list') {
 -     result = 'li'; }
 -   // Attributes context checks
 -   if (attributes.href) {
 -     result = 'a'; }
+-   if (attributes.src) {
+-     result = 'img'; }
 -   // Setting context
--   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) >= 0) {
--     bemto_chain_contexts[currentContext] = 'inline';
--   } else if (['ul','ol'].indexOf(result) >= 0) {
--     bemto_chain_contexts[currentContext] = 'list';
+-   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) !== 0) {
+-     bemto_chain_contexts[contextIndex] = 'inline';
+-   } else if (['ul','ol'].indexOf(result) !== 0) {
+-     bemto_chain_contexts[contextIndex] = 'list';
 -   } else {
--     bemto_chain_contexts[currentContext] = 'block'; }
+-     bemto_chain_contexts[contextIndex] = 'block'; }
 -   return result;
 - }
 
@@ -34,7 +36,7 @@
 -   bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
 -   if (!element) {
 -     bemto_chain[bemto_chain.length] = bemto_block
--     if (bemto_classes.indexOf(bemto_block) == -1) {
+-     if (bemto_classes.indexOf(bemto_block) === -1) {
 -       bemto_classes[bemto_classes.length] = bemto_block
 -     }
 -   } else {
@@ -47,9 +49,9 @@
 mixin b(tag)
   - attributes.class = bemto_rewrite_classes(attributes.class)
   - tag = bemto_check_tag(tag,attributes)
-  if tag == 'img'
+  if tag === 'img'
     img(alt='', attributes)
-  else if tag == 'input'
+  else if tag === 'input'
     input(type='text', attributes)
   else
     #{tag}(attributes)
@@ -61,9 +63,9 @@ mixin b(tag)
 mixin e(tag)
   - attributes.class = bemto_rewrite_classes(attributes.class, true)
   - tag = bemto_check_tag(tag,attributes)
-  if tag == 'img'
+  if tag === 'img'
     img(attributes)
-  else if tag == 'input'
+  else if tag === 'input'
     input(attributes)
   else
     #{tag}(attributes)
