@@ -6,33 +6,9 @@
 - var bemto_chain = []
 - var bemto_chain_contexts = ['block']
 
-//- Function for rewriting tag name on different contexts
-- function bemto_check_tag(tag,attributes){
--   var result = tag || 'div';
--   var contextIndex = bemto_chain_contexts.length;
--   // Checks for contexts
--   if (!tag && bemto_chain_contexts[contextIndex-1] === 'inline') {
--     result = 'span'; }
--   if (!tag && bemto_chain_contexts[contextIndex-1] === 'list') {
--     result = 'li'; }
--   // Attributes context checks
--   if (attributes.href) {
--     result = 'a'; }
--   if (attributes.src) {
--     result = 'img'; }
--   // Setting context
--   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) !== 0) {
--     bemto_chain_contexts[contextIndex] = 'inline';
--   } else if (['ul','ol'].indexOf(result) !== 0) {
--     bemto_chain_contexts[contextIndex] = 'list';
--   } else {
--     bemto_chain_contexts[contextIndex] = 'block'; }
--   return result;
-- }
-
 //- Expanding elements and modifiers
 //- and adjustong attributes
-- function bemto_init(attributes, isElement) {
+- function bemto_init(tag, attributes, isElement) {
 -   var bemto_classes = attributes.class.split(' ');
 -   var bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
 -   if (!isElement) {
@@ -44,12 +20,33 @@
 -     bemto_classes[0] = bemto_chain[bemto_chain.length-1] + '__' + bemto_classes[0]
 -   }
 -   attributes.class = bemto_classes.join(' ')
+-   // rewriting tag name on different contexts
+-   var result = tag || 'div';
+-   var contextIndex = bemto_chain_contexts.length;
+-   // Checks for contexts if no tag given
+-   if (!tag && bemto_chain_contexts[contextIndex-1] === 'inline') {
+-     result = 'span'; }
+-   if (!tag && bemto_chain_contexts[contextIndex-1] === 'list') {
+-     result = 'li'; }
+-   // Attributes context checks
+-   if (attributes.href) {
+-     result = 'a'; }
+-   if (attributes.src) {
+-     result = 'img'; }
+-   // Setting context
+-   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) !== -1) {
+-     bemto_chain_contexts[contextIndex] = 'inline';
+-   } else if (['ul','ol'].indexOf(result) !== -1) {
+-     bemto_chain_contexts[contextIndex] = 'list';
+-   } else {
+-     bemto_chain_contexts[contextIndex] = 'block'; }
+-   return result;
+
 - }
 
 //- Block
 mixin b(tag)
-  - var tag = bemto_check_tag(tag,attributes)
-  - bemto_init(attributes)
+  tag = bemto_init(tag,attributes)
   if tag === 'img'
     img(alt='', attributes)
   else if tag === 'input'
@@ -62,8 +59,7 @@ mixin b(tag)
 
 //- Element
 mixin e(tag)
-  - var tag = bemto_check_tag(tag,attributes)
-  - bemto_init(attributes, true)
+  tag = bemto_init(tag,attributes,true)
   if tag === 'img'
     img(attributes)
   else if tag === 'input'
