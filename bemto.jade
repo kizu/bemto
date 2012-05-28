@@ -1,0 +1,25 @@
+- var bemto_chain = []
+
+//- Creates tag with custom name
+mixin tag(tag)
+  case tag
+    when 'a': a(attributes): block
+    when 'ul': ul(attributes): block
+    when 'ol': ol(attributes): block
+    when 'li': li(attributes): block
+    when 'strong': strong(attributes): block
+    when 'strong': strong(attributes): block
+    when 'span': span(attributes): block
+    default: div(attributes): block
+
+//- Block
+mixin b(tag)
+  - bemto_chain[bemto_chain.length] = attributes.class
+  +tag(tag)(attributes)
+    block
+  - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
+
+//- Element
+mixin e(tag)
+  +tag(tag)(attributes, class = bemto_chain[bemto_chain.length-1] + '__' + attributes.class)
+     block
