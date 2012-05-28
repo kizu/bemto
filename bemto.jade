@@ -28,10 +28,25 @@
 -   return result;
 - }
 
+//- Function for expanding elements and modifiers
+- function bemto_rewrite_classes(classes, element) {
+-   bemto_classes = classes.split(' ');
+-   bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
+-   if (!element) {
+-     bemto_chain[bemto_chain.length] = bemto_block
+-     if (bemto_classes.indexOf(bemto_block) == -1) {
+-       bemto_classes[bemto_classes.length] = bemto_block
+-     }
+-   } else {
+-     bemto_classes[0] = bemto_chain[bemto_chain.length-1] + '__' + bemto_classes[0]
+-   }
+-   return bemto_classes.join(' ')
+- }
+
 //- Block
 mixin b(tag)
-  - bemto_chain[bemto_chain.length] = attributes.class
-  tag = bemto_check_tag(tag,attributes)
+  - attributes.class = bemto_rewrite_classes(attributes.class)
+  - tag = bemto_check_tag(tag,attributes)
   #{tag}(attributes)
     block
   - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
@@ -39,7 +54,8 @@ mixin b(tag)
 
 //- Element
 mixin e(tag)
-  tag = bemto_check_tag(tag,attributes)
-  #{tag}(attributes, class = bemto_chain[bemto_chain.length-1] + '__' + attributes.class)
-     block
+  - attributes.class = bemto_rewrite_classes(attributes.class, true)
+  - tag = bemto_check_tag(tag,attributes)
+  #{tag}(attributes)
+    block
   - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)

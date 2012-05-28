@@ -10,8 +10,8 @@
 2. Include it in your `.jade` project:
 
     ```Jade
-include bemto/bemto
-```
+    include bemto/bemto
+    ```
 
 3. Use it:
 
@@ -19,7 +19,7 @@ include bemto/bemto
     +b.block1
       +e.element1 Foo
       +b.block2
-        +e("a")(href="#bar").element Bar
+        +e('a')(href="#bar").element Bar
       +e.element2 Baz
     ```
 
@@ -80,7 +80,21 @@ This would render like
 
 ### Modifiers
 
-…
+“Modifier” is a state of the block or element. It is often written with the addition of it's type and/or value after the single underscore like `block_mode_foo` or just `block_foo`. However, at the most cases, the block must contain either the original block/element's class, either the modifier class.
+
+Bemto makes it easy to write such modifiers, 'cause you don't need now to write the same block's name twice:
+
+```Jade
++b.block_foo bar
+```
+
+Becomes
+
+```HTML
+<div class="block block_foo">bar</div>
+```
+
+See? You write just `.block_foo` but by fact get the `.block.block_foo` instead!
 
 ### Changing the tag name
 
