@@ -52,8 +52,8 @@
 - }
 
 //- Block
-mixin b(tag)
-  tag = bemto_open(tag,attributes)
+mixin b(tag, isElement)
+  tag = bemto_open(tag, attributes, isElement)
 
   if tag === 'img'
     img(alt='', attributes)
@@ -63,18 +63,8 @@ mixin b(tag)
     #{tag}(attributes)
       block
 
-  - bemto_close()
+  - bemto_close(isElement)
 
 //- Element
 mixin e(tag)
-  tag = bemto_open(tag,attributes,true)
-
-  if tag === 'img'
-    img(attributes)
-  else if tag === 'input'
-    input(attributes)
-  else
-    #{tag}(attributes)
-      block
-
-  - bemto_close(true)
+  +b(tag, true)(attributes): block
