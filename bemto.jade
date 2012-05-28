@@ -10,14 +10,21 @@
 - function bemto_check_tag(tag,attributes){
 -   var result = tag || 'div';
 -   var currentContext = bemto_chain_contexts.length;
+-   // Checks for contexts
 -   if (bemto_chain_contexts[currentContext-1] == 'inline') {
--     result = 'span';
--     bemto_chain_contexts[currentContext] = 'inline'
--   }
+-     result = 'span'; }
+-   if (bemto_chain_contexts[currentContext-1] == 'list') {
+-     result = 'li'; }
+-   // Attributes context checks
 -   if (attributes.href) {
--     result = 'a';
--     bemto_chain_contexts[currentContext] = 'inline'
--   }
+-     result = 'a'; }
+-   // Setting context
+-   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) >= 0) {
+- 	  bemto_chain_contexts[currentContext] = 'inline';
+-   } else if (['ul','ol'].indexOf(result) >= 0) {
+- 	  bemto_chain_contexts[currentContext] = 'list';
+-   } else {
+- 	  bemto_chain_contexts[currentContext] = 'block'; }
 -   return result;
 - }
 
@@ -35,3 +42,4 @@ mixin e(tag)
   tag = bemto_check_tag(tag,attributes)
   #{tag}(attributes, class = bemto_chain[bemto_chain.length-1] + '__' + attributes.class)
      block
+  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
