@@ -121,26 +121,26 @@ So, here is a bigger example:
 
 ```Jade
 +b('ul').list
-  +e.item
+  +b.list-item
     +e.link(href="foo")
-      +e.inner foo
-  +e.item
+      +e.text foo
+  +b.list-item
     +e.link(href="bar")
-      +e.inner bar
+      +e.text bar
 ```
 
 Would render to
 
 ```HTML
 <ul class="list">
-  <li class="list__item">
-    <a class="list__link" href="foo">
-      <span class="list__inner">foo</span>
+  <li class="list-item">
+    <a class="list-item__link link" href="foo">
+      <span class="list-item__text text">foo</span>
     </a>
   </li>
-  <li class="list__item">
-    <a class="list__link" href="bar">
-      <span class="list__inner">bar</span>
+  <li class="list-item">
+    <a class="list-item__link link" href="bar">
+      <span class="list-item__text text">bar</span>
     </a>
   </li>
 </ul>
