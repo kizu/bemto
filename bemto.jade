@@ -11,9 +11,9 @@
 -   var result = tag || 'div';
 -   var contextIndex = bemto_chain_contexts.length;
 -   // Checks for contexts
--   if (bemto_chain_contexts[contextIndex-1] === 'inline') {
+-   if (!tag && bemto_chain_contexts[contextIndex-1] === 'inline') {
 -     result = 'span'; }
--   if (bemto_chain_contexts[contextIndex-1] === 'list') {
+-   if (!tag && bemto_chain_contexts[contextIndex-1] === 'list') {
 -     result = 'li'; }
 -   // Attributes context checks
 -   if (attributes.href) {
@@ -30,11 +30,12 @@
 -   return result;
 - }
 
-//- Function for expanding elements and modifiers
-- function bemto_rewrite_classes(classes, element) {
--   bemto_classes = classes.split(' ');
--   bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
--   if (!element) {
+//- Expanding elements and modifiers
+//- and adjustong attributes
+- function bemto_init(attributes, isElement) {
+-   var bemto_classes = attributes.class.split(' ');
+-   var bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
+-   if (!isElement) {
 -     bemto_chain[bemto_chain.length] = bemto_block
 -     if (bemto_classes.indexOf(bemto_block) === -1) {
 -       bemto_classes[bemto_classes.length] = bemto_block
@@ -42,13 +43,13 @@
 -   } else {
 -     bemto_classes[0] = bemto_chain[bemto_chain.length-1] + '__' + bemto_classes[0]
 -   }
--   return bemto_classes.join(' ')
+-   attributes.class = bemto_classes.join(' ')
 - }
 
 //- Block
 mixin b(tag)
-  - attributes.class = bemto_rewrite_classes(attributes.class)
-  - tag = bemto_check_tag(tag,attributes)
+  - var tag = bemto_check_tag(tag,attributes)
+  - bemto_init(attributes)
   if tag === 'img'
     img(alt='', attributes)
   else if tag === 'input'
@@ -61,8 +62,8 @@ mixin b(tag)
 
 //- Element
 mixin e(tag)
-  - attributes.class = bemto_rewrite_classes(attributes.class, true)
-  - tag = bemto_check_tag(tag,attributes)
+  - var tag = bemto_check_tag(tag,attributes)
+  - bemto_init(attributes, true)
   if tag === 'img'
     img(attributes)
   else if tag === 'input'
