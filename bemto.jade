@@ -20,11 +20,11 @@
 -     result = 'a'; }
 -   // Setting context
 -   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) >= 0) {
-- 	  bemto_chain_contexts[currentContext] = 'inline';
+-     bemto_chain_contexts[currentContext] = 'inline';
 -   } else if (['ul','ol'].indexOf(result) >= 0) {
-- 	  bemto_chain_contexts[currentContext] = 'list';
+-     bemto_chain_contexts[currentContext] = 'list';
 -   } else {
-- 	  bemto_chain_contexts[currentContext] = 'block'; }
+-     bemto_chain_contexts[currentContext] = 'block'; }
 -   return result;
 - }
 
