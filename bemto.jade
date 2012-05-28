@@ -47,8 +47,13 @@
 mixin b(tag)
   - attributes.class = bemto_rewrite_classes(attributes.class)
   - tag = bemto_check_tag(tag,attributes)
-  #{tag}(attributes)
-    block
+  if tag == 'img'
+    img(alt='', attributes)
+  else if tag == 'input'
+    input(type='text', attributes)
+  else
+    #{tag}(attributes)
+      block
   - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
   - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
 
@@ -56,6 +61,11 @@ mixin b(tag)
 mixin e(tag)
   - attributes.class = bemto_rewrite_classes(attributes.class, true)
   - tag = bemto_check_tag(tag,attributes)
-  #{tag}(attributes)
-    block
+  if tag == 'img'
+    img(attributes)
+  else if tag == 'input'
+    input(attributes)
+  else
+    #{tag}(attributes)
+      block
   - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
