@@ -6,9 +6,9 @@
 - var bemto_chain = []
 - var bemto_chain_contexts = ['block']
 
-//- Expanding elements and modifiers
-//- and adjustong attributes
-- function bemto_init(tag, attributes, isElement) {
+//- Opening actions
+- function bemto_open(tag, attributes, isElement) {
+-   // Rewriting the elements and modifiers
 -   var bemto_classes = attributes.class.split(' ');
 -   var bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
 -   if (!isElement) {
@@ -41,12 +41,20 @@
 -   } else {
 -     bemto_chain_contexts[contextIndex] = 'block'; }
 -   return result;
+- }
 
+//- Closing actions
+- function bemto_close(isElement) {
+-   if (!isElement) {
+-     bemto_chain = bemto_chain.splice(0,bemto_chain.length-1);
+-   }
+-   bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
 - }
 
 //- Block
 mixin b(tag)
-  tag = bemto_init(tag,attributes)
+  tag = bemto_open(tag,attributes)
+
   if tag === 'img'
     img(alt='', attributes)
   else if tag === 'input'
@@ -54,12 +62,13 @@ mixin b(tag)
   else
     #{tag}(attributes)
       block
-  - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
-  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
+
+  - bemto_close()
 
 //- Element
 mixin e(tag)
-  tag = bemto_init(tag,attributes,true)
+  tag = bemto_open(tag,attributes,true)
+
   if tag === 'img'
     img(attributes)
   else if tag === 'input'
@@ -67,4 +76,5 @@ mixin e(tag)
   else
     #{tag}(attributes)
       block
-  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
+
+  - bemto_close(true)
