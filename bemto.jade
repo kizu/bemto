@@ -1,25 +1,29 @@
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+// Some global variables
 - var bemto_chain = []
 
-//- Creates tag with custom name
-mixin tag(tag)
-  case tag
-    when 'a': a(attributes): block
-    when 'ul': ul(attributes): block
-    when 'ol': ol(attributes): block
-    when 'li': li(attributes): block
-    when 'strong': strong(attributes): block
-    when 'strong': strong(attributes): block
-    when 'span': span(attributes): block
-    default: div(attributes): block
+//- Function for rewriting tag name on different contexts
+- function bemto_check_tag(tag,attributes){
+-   var result = tag || 'div';
+-   if (attributes.href) {
+-     result = 'a';
+-   }
+-   return result;
+- }
 
 //- Block
 mixin b(tag)
   - bemto_chain[bemto_chain.length] = attributes.class
-  +tag(tag)(attributes)
+  tag = bemto_check_tag(tag,attributes)
+  #{tag}(attributes)
     block
   - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
 
 //- Element
 mixin e(tag)
-  +tag(tag)(attributes, class = bemto_chain[bemto_chain.length-1] + '__' + attributes.class)
+  tag = bemto_check_tag(tag,attributes)
+  #{tag}(attributes, class = bemto_chain[bemto_chain.length-1] + '__' + attributes.class)
      block
