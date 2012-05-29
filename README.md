@@ -150,13 +150,13 @@ Would render to
 ```HTML
 <ul class="list">
   <li class="list-item">
-    <a class="list-item__link link" href="foo">
-      <span class="list-item__text text">foo</span>
+    <a class="list-item__link" href="foo">
+      <span class="list-item__text">foo</span>
     </a>
   </li>
   <li class="list-item">
-    <a class="list-item__link link" href="bar">
-      <span class="list-item__text text">bar</span>
+    <a class="list-item__link" href="bar">
+      <span class="list-item__text">bar</span>
     </a>
   </li>
 </ul>
