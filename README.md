@@ -2,7 +2,7 @@
 
 ## Install & Use
 
-0. You'll need the [latest version of Jade](https://github.com/visionmedia/jade), is still a bit outdated.
+0. You'll need the [latest version of Jade](https://github.com/visionmedia/jade), one in npm is still a bit outdated.
 
 1. Clone `bemto` somewhere to your project:
 
