@@ -98,6 +98,23 @@ Becomes
 
 See? You write just `.block_foo` but by fact get the `.block.block_foo` instead!
 
+But what if you need to have more than one modifier on one block or element? Bemto have a way to do so: add a class to your block or element starting with a modifier token:
+
+```Jade
++b.block_foo._bar._baz
+  +e.element_type_lol._mode_moddy Blah
+```
+
+and that would render as
+
+```HTML
+<div class="block block_foo block_bar block_baz">
+  <div class="block__element block__element_type_lol block__element_mode_moddy">
+    Blah
+  </div>
+</div>
+```
+
 ### Changing the tag name
 
 By default the blocks and elements render as `div`s. You can change it by passing the desired tag name as an argument:
