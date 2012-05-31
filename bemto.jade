@@ -3,7 +3,7 @@
 //- MIT Licensed
 
 //- Temporary tag mixin, until #659 and #660 are fixed
-mixin tag(tag)
+mixin bemto_tag(tag)
   case tag
     when 'a': a(attributes): block
     when 'abbr': abbr(attributes): block
@@ -70,10 +70,10 @@ mixin b(tag, isElement)
 
   //- Use interpolation herewhen #659 and #660 are fixed
   //- #{newTag}(attributes)
-  +tag(newTag)(attributes)
+  +bemto_tag(newTag)(attributes)
     block
 
-  // Closing actions (remove the current block from the chain)
+  //- Closing actions (remove the current block from the chain)
   if !isElement
     - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1);
   - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
