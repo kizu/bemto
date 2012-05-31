@@ -2,68 +2,81 @@
 //- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
 //- MIT Licensed
 
+//- Temporary tag mixin, until #659 and #660 are fixed
+mixin tag(tag)
+  case tag
+    when 'a': a(attributes): block
+    when 'abbr': abbr(attributes): block
+    when 'acronym': acronym(attributes): block
+    when 'b': b(attributes): block
+    when 'code': code(attributes): block
+    when 'em': em(attributes): block
+    when 'i': i(attributes): block
+    when 'ins': ins(attributes): block
+    when 'kbd': kbd(attributes): block
+    when 'samp': samp(attributes): block
+    when 'small': small(attributes): block
+    when 'span': span(attributes): block
+    when 'strong': strong(attributes): block
+    when 'sub': sub(attributes): block
+    when 'sup': sup(attributes): block
+    when 'br': br(attributes)
+    when 'img': img(alt='', attributes)
+    when 'input': input(type='text', attributes)
+    default: #{tag}(attributes): block
+
 //- Some global variables
 - var bemto_chain = []
 - var bemto_chain_contexts = ['block']
 
-//- Opening actions
-- function bemto_open(tag, attributes, isElement) {
--   // Rewriting the elements and modifiers
--   var bemto_classes = attributes.class.split(' ');
--   var bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
--   if (!isElement) {
--     bemto_chain[bemto_chain.length] = bemto_block
--     if (bemto_classes.indexOf(bemto_block) === -1) {
--       bemto_classes[bemto_classes.length] = bemto_block
--     }
--   } else {
--     bemto_classes[0] = bemto_chain[bemto_chain.length-1] + '__' + bemto_classes[0]
--   }
--   attributes.class = bemto_classes.join(' ')
--   // rewriting tag name on different contexts
--   var result = tag || 'div';
--   var contextIndex = bemto_chain_contexts.length;
--   // Checks for contexts if no tag given
--   if (!tag && bemto_chain_contexts[contextIndex-1] === 'inline') {
--     result = 'span'; }
--   if (!tag && bemto_chain_contexts[contextIndex-1] === 'list') {
--     result = 'li'; }
--   // Attributes context checks
--   if (attributes.href) {
--     result = 'a'; }
--   if (attributes.src) {
--     result = 'img'; }
--   // Setting context
--   if (['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(result) !== -1) {
--     bemto_chain_contexts[contextIndex] = 'inline';
--   } else if (['ul','ol'].indexOf(result) !== -1) {
--     bemto_chain_contexts[contextIndex] = 'list';
--   } else {
--     bemto_chain_contexts[contextIndex] = 'block'; }
--   return result;
-- }
-
-//- Closing actions
-- function bemto_close(isElement) {
--   if (!isElement) {
--     bemto_chain = bemto_chain.splice(0,bemto_chain.length-1);
--   }
--   bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
-- }
-
 //- Block
 mixin b(tag, isElement)
-  tag = bemto_open(tag, attributes, isElement)
+  //- Rewriting the elements and modifiers
+  - var bemto_classes = attributes.class.split(' ');
+  - var bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
 
-  if tag === 'img'
-    img(alt='', attributes)
-  else if tag === 'input'
-    input(type='text', attributes)
+  if !isElement
+    - bemto_chain[bemto_chain.length] = bemto_block
+    if bemto_classes.indexOf(bemto_block) === -1
+      - bemto_classes[bemto_classes.length] = bemto_block
   else
-    #{tag}(attributes)
-      block
+    - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + '__' + bemto_classes[0]
 
-  - bemto_close(isElement)
+  - attributes.class = bemto_classes.join(' ')
+
+  //- rewriting tag name on different contexts
+  - var newTag = tag || 'div';
+  - var contextIndex = bemto_chain_contexts.length;
+
+  //- Checks for contexts if no tag given
+  if !tag && bemto_chain_contexts[contextIndex-1] === 'inline'
+    - newTag = 'span';
+  if !tag && bemto_chain_contexts[contextIndex-1] === 'list'
+    - newTag = 'li';
+
+  //- Attributes context checks
+  if attributes.href
+    - newTag = 'a';
+  if attributes.src
+    - newTag = 'img';
+
+  //- Setting context
+  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[contextIndex] = 'inline';
+  else if ['ul','ol'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[contextIndex] = 'list';
+  else
+    - bemto_chain_contexts[contextIndex] = 'block';
+
+  //- Use interpolation herewhen #659 and #660 are fixed
+  //- #{newTag}(attributes)
+  +tag(newTag)(attributes)
+    block
+
+  // Closing actions (remove the current block from the chain)
+  if !isElement
+    - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1);
+  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
 
 //- Element
 mixin e(tag)
