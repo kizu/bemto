@@ -2,6 +2,11 @@
 //- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
 //- MIT Licensed
 
+//- Settings
+- var bemto_settings_prefix = ''
+- var bemto_settings_element = '__'
+- var bemto_settings_modifier = '_'
+
 //- Temporary tag mixin, until #659 and #660 are fixed
 mixin bemto_tag(tag)
   case tag
@@ -29,34 +34,39 @@ mixin bemto_tag(tag)
 //- Some global variables
 - var bemto_chain = []
 - var bemto_chain_contexts = ['block']
-
+- var bemto_regex_element =
 //- Block
 mixin b(tag, isElement)
   //- Rewriting the elements and modifiers
   - var bemto_classes = attributes.class.split(' ');
-  - var bemto_block = bemto_classes[0].match(/^([^_]+)/)[1]
+  - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings_element + '|' + bemto_settings_modifier +').)+)'))[1]
 
   if !isElement
     - bemto_chain[bemto_chain.length] = bemto_block
+    - bemto_classes[0] = bemto_classes[0]
   else
-    - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + '__' + bemto_classes[0]
+    - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings_element + bemto_classes[0]
 
-  - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + '__' : '') + bemto_block
+  - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings_element : '') + bemto_block
 
   //- Adding the block if there is only modifier and/or element
   if bemto_classes.indexOf(current_block) === -1
     - bemto_classes[bemto_classes.length] = current_block
 
   each class, i in bemto_classes
-    if class.match(/^_[^_]/)
+    if class.match(new RegExp('^(?!' + bemto_settings_element + ')' + bemto_settings_modifier))
       //- Expanding the modifiers
       - bemto_classes[i] = current_block + class
-    else if class.match(/^__/)
-      // Expanding the mixed in elements
+    else if class.match(new RegExp('^' + bemto_settings_element))
+      //- Expanding the mixed in elements
       if bemto_chain[bemto_chain.length-2]
         - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + class
       else
         - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + class
+
+    //- Adding prefixes
+    if bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings_element + '|' + bemto_settings_modifier + '))'))
+      - bemto_classes[i] = bemto_settings_prefix + bemto_classes[i]
 
   - attributes.class = bemto_classes.join(' ')
 

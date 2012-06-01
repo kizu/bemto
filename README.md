@@ -181,3 +181,84 @@ Would render to
 
 For now that's all, but there would be other contexts in the future of bemto.
 
+## Settings
+
+There are some settings you can set for different syntaxes of BEM.
+
+For doing so, you must set them after including the `bemto` like this:
+
+```Jade
+- bemto_settings_prefix = ''
+- bemto_settings_element = '__'
+- bemto_settings_modifier = '_'
+```
+
+Here you can see all available settings with their default values.
+
+### Adding Prefix
+
+If you'd like to prefix all your bemto-generated blocks, you can set the `bemto_settings_prefix` setting to something, so it would be added to the beginning of all your blocks. Like this:
+
+```Jade
+- bemto_settings_prefix = 'b-'
+
++b.block
+  +e.element foo
+
+```
+
+and that would then render as
+
+```HTML
+<div class="b-block">
+  <div class="b-block__element">
+    foo
+  </div>
+</div>
+```
+
+### Setting for Element syntax
+
+If you don't like the default elements syntax with the `__` delimiter, you can set using the `bemto_settings_element` setting:
+
+```Jade
+- bemto_settings_element = '-'
+
++b.block
+  +e.element foo
+
+```
+
+this would render to
+
+```HTML
+<div class="block">
+  <div class="block-element">
+    foo
+  </div>
+</div>
+```
+
+### Setting for Modifier syntax
+
+If you'd like to use different modifier syntax, like the one Nicolas Gallagher mentioned in [his article](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/), you can use the `bemto_settings_modifier` setting:
+
+```Jade
+- bemto_settings_modifier = '--'
+
++b.block--modifier-name.--other-modifier foo
+```
+
+and that would expand to
+
+```HTML
+<div class="block block--modifier-name block--other-modifier">
+  foo
+</div>
+```
+
+- - -
+
+To be continued!
+
+Id you'd like to follow on the bemto progress, [follow me on twitter](https://twitter.com/kizmarh/).
