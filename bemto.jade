@@ -114,7 +114,7 @@ mixin b(tag, isElement)
     if bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings_element + '|' + bemto_settings_modifier + '))'))
       - bemto_classes[i] = bemto_settings_prefix + bemto_classes[i]
 
-  - attributes.klass = bemto_classes.join(' ')
+  - attributes.class = bemto_classes.join(' ')
 
   //- rewriting tag name on different contexts
   - var newTag = tag || 'div';
