@@ -99,22 +99,22 @@ mixin b(tag, isElement)
   if bemto_classes.indexOf(current_block) === -1
     - bemto_classes[bemto_classes.length] = current_block
 
-  each class, i in bemto_classes
-    if class.match(new RegExp('^(?!' + bemto_settings_element + ')' + bemto_settings_modifier))
+  each klass, i in bemto_classes
+    if klass.match(new RegExp('^(?!' + bemto_settings_element + ')' + bemto_settings_modifier))
       //- Expanding the modifiers
-      - bemto_classes[i] = current_block + class
-    else if class.match(new RegExp('^' + bemto_settings_element))
+      - bemto_classes[i] = current_block + klass
+    else if klass.match(new RegExp('^' + bemto_settings_element))
       //- Expanding the mixed in elements
       if bemto_chain[bemto_chain.length-2]
-        - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + class
+        - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + klass
       else
-        - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + class
+        - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + klass
 
     //- Adding prefixes
     if bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings_element + '|' + bemto_settings_modifier + '))'))
       - bemto_classes[i] = bemto_settings_prefix + bemto_classes[i]
 
-  - attributes.class = bemto_classes.join(' ')
+  - attributes.klass = bemto_classes.join(' ')
 
   //- rewriting tag name on different contexts
   - var newTag = tag || 'div';
