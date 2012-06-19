@@ -61,7 +61,7 @@ While the simple block's syntax, of course, is harder than the simple Jade's tag
 
 ### Elements
 
-“Element” is a accessory element of the block. You can read on the concept of the elements in the [bem methodology](http://bem.github.com/bem-method/pages/beginning/beginning.en.html#Element), or in the [great article by Nicolas Gallagher](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/) (see the “Structured class names” part). Elements often are written using the block's name plus element's name with some separator (often `__` or `-`) inbetween.
+“Element” is a accessory element of the block. You can read on the concept of the elements in the [bem methodology](http://bem.github.com/bem-method/pages/beginning/beginning.en.html#Element), or in the [great article by Nicolas Gallagher](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/) (see the “Structured class names” part). Elements often are written using the block's name plus element's name with some separator (often `__` or `-`) in-between.
 
 Bemto gives a convenient way to declare the elements: just use the `e` mixin inside any block context:
 
@@ -254,6 +254,51 @@ and that would expand to
   foo
 </div>
 ```
+
+## Using for building complex mixins
+
+This is somewhat obvious, but I must mention that the bemto blocks would be great for using as the bricks for building more complex blocks. The Jade mixins work in the way where you can translate any attributes through to the any inner blocks. So you can do this:
+
+```Jade
+mixin link(url)
+  +b('span').link(attributes, href=url)
+    block
+```
+
+And then use it in this way:
+
+```Jade
+  +link("#Foo") Foo
+
+  +link("https://github.com")._external Github
+
+  +link("http://kizu.ru").url(rel="me") Here I am
+
+  +link Ah, I'm not a link
+
+  +link("https://github.com")
+    +e.icon(src="http://favicon.yandex.net/favicon/github.com")
+    +e.text Github
+```
+
+And that would render to
+
+```HTML
+<a class="link" href="#Foo">Foo</a>
+
+<a class="link link_external" href="https://github.com">Github</a>
+
+<a class="link url" href="http://kizu.ru" rel="me">Here I am</a>
+
+<span class="link">Ah, I'm not a link</span>
+
+<a class="link" href="https://github.com">
+  <img alt="" class="link__icon" src="http://favicon.yandex.net/favicon/github.com"/>
+  <span class="link__text">Github</span>
+</a>
+```
+
+There you can see almost all of the bemto features that can be used for any mixin with `attributes` variable attached to any inner bemto block inside of it.
 
 - - -
 
