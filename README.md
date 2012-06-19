@@ -268,15 +268,15 @@ mixin link(url)
 And then use it in this way:
 
 ```Jade
-  +link("#Foo") Foo
+  +link('#Foo') Foo
 
-  +link("https://github.com")._external Github
+  +link('https://github.com')._external Github
 
-  +link("http://kizu.ru").url(rel="me") Here I am
+  +link('http://kizu.ru').url(rel="me") Here I am
 
   +link Ah, I'm not a link
 
-  +link("https://github.com")
+  +link('https://github.com')
     +e.icon(src="http://favicon.yandex.net/favicon/github.com")
     +e.text Github
 ```
