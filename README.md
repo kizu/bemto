@@ -11,7 +11,7 @@
     - [Attributes](#attributes)
     - [Context](#context)
 
-3. [Settings](#settings)
+3. [Settings](#settings%C2%A0)
     - [Adding Prefix](#adding-prefix)
     - [Setting for Element syntax](#setting-for-element-syntax)
     - [Setting for Modifier syntax](#setting-for-modifier-syntax)
@@ -197,7 +197,7 @@ Would render to
 
 For now that's all, but there would be other contexts in the future of bemto.
 
-## Settings
+## Settings 
 
 There are some settings you can set for different syntaxes of BEM.
 
