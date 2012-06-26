@@ -1,5 +1,23 @@
 # Bemto — mixins for writing [BEM](http://bem.github.com/bem-method/pages/beginning/beginning.en.html)-style code for [Jade](https://github.com/visionmedia/jade).
 
+## Table of Contents
+
+1. [Install & Use](#install--use)
+2. [Features](#features)
+    - [Blocks](#blocks)
+    - [Elements](#elements)
+    - [Modifiers](#modifiers)
+    - [Changing the tag name](#changing-the-tag-name)
+    - [Attributes](#attributes)
+    - [Context](#context)
+
+3. [Settings](#settings)
+    - [Adding Prefix](#adding-prefix)
+    - [Setting for Element syntax](#setting-for-element-syntax)
+    - [Setting for Modifier syntax](#setting-for-modifier-syntax)
+
+4. Using for building complex mixins](#using-for-building-complex-mixins)
+
 ## Install & Use
 
 1. Clone `bemto` somewhere to your project:
