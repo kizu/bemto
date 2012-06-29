@@ -72,7 +72,14 @@ mixin bemto_tag(tag)
     when 'hr': br(attributes)
     when 'br': br(attributes)
     when 'wbr': br(attributes)
-    when 'img': img(alt='', attributes)
+    when 'img'
+      //- If there is no title we don't need it to show even if there is some alt
+      if attributes.alt && !attributes.title
+        - attributes.title = ''
+      //- If we have title, we must have it in alt if it's not set
+      if attributes.title && !attributes.alt
+        - attributes.alt = attributes.title
+      img(alt='', attributes)
     when 'input': input(type='text', attributes)
     default: div(attributes): block
     //-default: #{tag}(attributes): block
