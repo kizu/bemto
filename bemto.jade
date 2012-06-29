@@ -14,10 +14,11 @@ mixin bemto_tag(tag)
   - var contextIndex = bemto_chain_contexts.length;
 
   //- Checks for contexts if no tag given
-  if !tag && bemto_chain_contexts[contextIndex-1] === 'inline'
-    - newTag = 'span';
-  if !tag && bemto_chain_contexts[contextIndex-1] === 'list'
-    - newTag = 'li';
+  if !tag
+    if bemto_chain_contexts[contextIndex-1] === 'inline'
+      - newTag = 'span';
+    if bemto_chain_contexts[contextIndex-1] === 'list'
+      - newTag = 'li';
 
   //- Attributes context checks
   if attributes.href
@@ -25,13 +26,23 @@ mixin bemto_tag(tag)
   if attributes.src
     - newTag = 'img';
 
+  //- Wrappers
+  if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
+    | <li>
+  if bemto_chain_contexts[contextIndex-1] !== 'list' && bemto_chain_contexts[contextIndex-1] !== 'pseudo-list' && newTag === 'li'
+    | <ul>
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'pseudo-list';
+  if bemto_chain_contexts[contextIndex-1] === 'pseudo-list' && newTag !== 'li'
+    | </ul>
+    - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
+
   //- Setting context
   if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[contextIndex] = 'inline';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline';
   else if ['ul','ol'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[contextIndex] = 'list';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'list';
   else
-    - bemto_chain_contexts[contextIndex] = 'block';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'block';
 
   case newTag
     when 'a': a(attributes): block
@@ -108,6 +119,10 @@ mixin bemto_tag(tag)
     default: div(attributes): block
     //- Use interpolation here for non-tweaked tags when #659 and #660 are fixed
     //-default: #{newTag}(attributes): block
+
+  //- Closing all the wrapper tails
+  if bemto_chain_contexts[contextIndex-1] === 'list' && newTag != 'li'
+    | </li>
 
 //- Some global variables
 - var bemto_chain = []
