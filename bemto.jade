@@ -17,22 +17,22 @@ mixin bemto_tag(tag)
   if !tag
     if bemto_chain_contexts[contextIndex-1] === 'inline'
       - newTag = 'span';
-    if bemto_chain_contexts[contextIndex-1] === 'list'
+    else if bemto_chain_contexts[contextIndex-1] === 'list'
       - newTag = 'li';
 
   //- Attributes context checks
   if attributes.href
     - newTag = 'a';
-  if attributes.src
+  else if attributes.src
     - newTag = 'img';
 
-  //- Wrappers
+  //- Contextual wrappers
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
     | <li>
-  if bemto_chain_contexts[contextIndex-1] !== 'list' && bemto_chain_contexts[contextIndex-1] !== 'pseudo-list' && newTag === 'li'
+  else if bemto_chain_contexts[contextIndex-1] !== 'list' && bemto_chain_contexts[contextIndex-1] !== 'pseudo-list' && newTag === 'li'
     | <ul>
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'pseudo-list';
-  if bemto_chain_contexts[contextIndex-1] === 'pseudo-list' && newTag !== 'li'
+  else if bemto_chain_contexts[contextIndex-1] === 'pseudo-list' && newTag !== 'li'
     | </ul>
     - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
 
