@@ -7,9 +7,33 @@
 - var bemto_settings_element = '__'
 - var bemto_settings_modifier = '_'
 
-//- Temporary tag mixin, until #659 and #660 are fixed
+//- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
 mixin bemto_tag(tag)
-  case tag
+  //- rewriting tag name on different contexts
+  - var newTag = tag || 'div';
+  - var contextIndex = bemto_chain_contexts.length;
+
+  //- Checks for contexts if no tag given
+  if !tag && bemto_chain_contexts[contextIndex-1] === 'inline'
+    - newTag = 'span';
+  if !tag && bemto_chain_contexts[contextIndex-1] === 'list'
+    - newTag = 'li';
+
+  //- Attributes context checks
+  if attributes.href
+    - newTag = 'a';
+  if attributes.src
+    - newTag = 'img';
+
+  //- Setting context
+  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[contextIndex] = 'inline';
+  else if ['ul','ol'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[contextIndex] = 'list';
+  else
+    - bemto_chain_contexts[contextIndex] = 'block';
+
+  case newTag
     when 'a': a(attributes): block
     when 'abbr': abbr(attributes): block
     when 'address': address(attributes): block
@@ -82,7 +106,8 @@ mixin bemto_tag(tag)
       img(alt='', attributes)
     when 'input': input(type='text', attributes)
     default: div(attributes): block
-    //-default: #{tag}(attributes): block
+    //- Use interpolation here for non-tweaked tags when #659 and #660 are fixed
+    //-default: #{newTag}(attributes): block
 
 //- Some global variables
 - var bemto_chain = []
@@ -125,33 +150,7 @@ mixin b(tag, isElement)
     //- Write modified classes to attributes in the correct order
     - attributes.class = bemto_classes.sort().join(' ')
 
-  //- rewriting tag name on different contexts
-  - var newTag = tag || 'div';
-  - var contextIndex = bemto_chain_contexts.length;
-
-  //- Checks for contexts if no tag given
-  if !tag && bemto_chain_contexts[contextIndex-1] === 'inline'
-    - newTag = 'span';
-  if !tag && bemto_chain_contexts[contextIndex-1] === 'list'
-    - newTag = 'li';
-
-  //- Attributes context checks
-  if attributes.href
-    - newTag = 'a';
-  if attributes.src
-    - newTag = 'img';
-
-  //- Setting context
-  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[contextIndex] = 'inline';
-  else if ['ul','ol'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[contextIndex] = 'list';
-  else
-    - bemto_chain_contexts[contextIndex] = 'block';
-
-  //- Use interpolation herewhen #659 and #660 are fixed
-  //- #{newTag}(attributes)
-  +bemto_tag(newTag)(attributes)
+  +bemto_tag(tag)(attributes)
     block
 
   //- Closing actions (remove the current block from the chain)
