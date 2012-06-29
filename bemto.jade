@@ -83,38 +83,39 @@ mixin bemto_tag(tag)
 - var bemto_regex_element =
 //- Block
 mixin b(tag, isElement)
-  //- Rewriting the elements and modifiers
-  - var bemto_classes = attributes.class.split(' ');
-  - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings_element + '|' + bemto_settings_modifier +').)+)'))[1]
+  //- Rewriting the class for elements and modifiers
+  if attributes.class
+    - var bemto_classes = attributes.class.split(' ');
+    - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings_element + '|' + bemto_settings_modifier +').)+)'))[1]
 
-  if !isElement
-    - bemto_chain[bemto_chain.length] = bemto_block
-    - bemto_classes[0] = bemto_classes[0]
-  else
-    - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings_element + bemto_classes[0]
+    if !isElement
+      - bemto_chain[bemto_chain.length] = bemto_block
+      - bemto_classes[0] = bemto_classes[0]
+    else
+      - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings_element + bemto_classes[0]
 
-  - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings_element : '') + bemto_block
+    - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings_element : '') + bemto_block
 
-  //- Adding the block if there is only modifier and/or element
-  if bemto_classes.indexOf(current_block) === -1
-    - bemto_classes[bemto_classes.length] = current_block
+    //- Adding the block if there is only modifier and/or element
+    if bemto_classes.indexOf(current_block) === -1
+      - bemto_classes[bemto_classes.length] = current_block
 
-  each klass, i in bemto_classes
-    if klass.match(new RegExp('^(?!' + bemto_settings_element + ')' + bemto_settings_modifier))
-      //- Expanding the modifiers
-      - bemto_classes[i] = current_block + klass
-    else if klass.match(new RegExp('^' + bemto_settings_element))
-      //- Expanding the mixed in elements
-      if bemto_chain[bemto_chain.length-2]
-        - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + klass
-      else
-        - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + klass
+    each klass, i in bemto_classes
+      if klass.match(new RegExp('^(?!' + bemto_settings_element + ')' + bemto_settings_modifier))
+        //- Expanding the modifiers
+        - bemto_classes[i] = current_block + klass
+      else if klass.match(new RegExp('^' + bemto_settings_element))
+        //- Expanding the mixed in elements
+        if bemto_chain[bemto_chain.length-2]
+          - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + klass
+        else
+          - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + klass
 
-    //- Adding prefixes
-    if bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings_element + '|' + bemto_settings_modifier + '))'))
-      - bemto_classes[i] = bemto_settings_prefix + bemto_classes[i]
+      //- Adding prefixes
+      if bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings_element + '|' + bemto_settings_modifier + '))'))
+        - bemto_classes[i] = bemto_settings_prefix + bemto_classes[i]
 
-  - attributes.class = bemto_classes.join(' ')
+    - attributes.class = bemto_classes.join(' ')
 
   //- rewriting tag name on different contexts
   - var newTag = tag || 'div';
