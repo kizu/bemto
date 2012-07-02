@@ -16,7 +16,7 @@
     - [Setting for Element syntax](#setting-for-element-syntax)
     - [Setting for Modifier syntax](#setting-for-modifier-syntax)
 
-4. Using for building complex mixins](#using-for-building-complex-mixins)
+4. [Using for building complex mixins](#using-for-building-complex-mixins)
 
 ## Install & Use
 
