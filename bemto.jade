@@ -23,6 +23,8 @@ mixin bemto_tag(tag)
   //- Attributes context checks
   if attributes.href
     - newTag = 'a';
+  if attributes.for
+    - newTag = 'label';
   else if attributes.src
     - newTag = 'img';
 
@@ -37,7 +39,7 @@ mixin bemto_tag(tag)
     - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
 
   //- Setting context
-  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup'].indexOf(newTag) !== -1
+  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline';
   else if ['ul','ol'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'list';
