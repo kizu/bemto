@@ -6,11 +6,12 @@
 - var bemto_settings_prefix = ''
 - var bemto_settings_element = '__'
 - var bemto_settings_modifier = '_'
+- var bemto_settings_default_tag = 'div'
 
 //- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
 mixin bemto_tag(tag)
   //- rewriting tag name on different contexts
-  - var newTag = tag || 'div';
+  - var newTag = tag || bemto_settings_default_tag;
   - var contextIndex = bemto_chain_contexts.length;
 
   //- Checks for contexts if no tag given
@@ -39,7 +40,7 @@ mixin bemto_tag(tag)
     - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
 
   //- Setting context
-  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label'].indexOf(newTag) !== -1
+  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label','p'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline';
   else if ['ul','ol'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'list';
@@ -118,6 +119,9 @@ mixin bemto_tag(tag)
         - attributes.alt = attributes.title
       img(alt='', attributes)
     when 'input': input(type='text', attributes)
+    when 'html'
+      !!! 5
+      html(attributes): block
     default: div(attributes): block
     //- Use interpolation here for non-tweaked tags when #659 and #660 are fixed
     //-default: #{newTag}(attributes): block
