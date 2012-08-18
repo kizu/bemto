@@ -1,0 +1,13 @@
+include ../../bemto
+
++b.foo(title="Oh, it's a title")
+  +e('a').bar(href='#baz') baz
+
+p
+  +b.image(src="foo.png")
+
+p
+  +b.image(src="foo.png", alt="no title here")
+
+p
+  +b.image(src="foo.png", title="alt is a cloned title")

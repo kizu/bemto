@@ -1,0 +1,17 @@
+{
+  "name": "bemto",
+  "description": "Smart mixins for writing BEM in Jade",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kizu/bemto.git"
+  },
+  "devDependencies": {
+      "jade": "0.27.x"
+    , "mocha": "*"
+    , "should": "*"
+  },
+  "author": "Roman Komarov <kizu@kizu.ru>",
+  "main": "./bemto.jade",
+  "engines": { "node": "*" }
+}

@@ -164,7 +164,7 @@ would render like
 
 #### Automatic attributes
 
-There are some tags like `img` that must have at least one attribute set. Bemto would create attributes with some predefined values for such tags. So, for images this code — `+b.image(src="foo.png")` would render `<img src="foo.png" alt="" />` — you can see that in that case  there is the added empty `alt`.
+There are some tags like `img` that must have at least one attribute set. Bemto would create attributes with some predefined values for such tags. So, for images this code — `+b.image(src="foo.png")` would render `<img alt="" class="image" src="foo.png"/>` — you can see that in that case there is the added empty `alt`.
 
 Also, in some cases there is a need to adjust some attributes according to other ones. For `img` if the `alt` is set, but the `title` is not we'd need to set it to empty, 'cause there'd be a inconsistency between browsers (IE would show the `title` bubble for `alt`). And from the other side, if there is only `title` set in an image, we'd need to clone it to `alt`. Bemto do all those things.
 
