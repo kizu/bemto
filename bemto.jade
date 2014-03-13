@@ -48,68 +48,68 @@ mixin bemto_tag(tag)
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'block';
 
   case newTag
-    when 'a': a(attributes): block
-    when 'abbr': abbr(attributes): block
-    when 'address': address(attributes): block
-    when 'article': article(attributes): block
-    when 'aside': aside(attributes): block
-    when 'b': b(attributes): block
-    when 'blockquote': blockquote(attributes): block
-    when 'body': body(attributes): block
-    when 'button': button(attributes): block
-    when 'caption': caption(attributes): block
-    when 'cite': cite(attributes): block
-    when 'code': code(attributes): block
-    when 'dd': dd(attributes): block
-    when 'del': del(attributes): block
-    when 'dfn': dfn(attributes): block
-    when 'dl': dl(attributes): block
-    when 'dt': dt(attributes): block
-    when 'em': em(attributes): block
-    when 'fieldset': fieldset(attributes): block
-    when 'footer': footer(attributes): block
-    when 'form': form(attributes): block
-    when 'h1': h1(attributes): block
-    when 'h2': h2(attributes): block
-    when 'h3': h3(attributes): block
-    when 'h4': h4(attributes): block
-    when 'h5': h5(attributes): block
-    when 'h6': h6(attributes): block
-    when 'header': header(attributes): block
-    when 'i': i(attributes): block
-    when 'ins': ins(attributes): block
-    when 'kbd': kbd(attributes): block
-    when 'label': label(attributes): block
-    when 'legend': legend(attributes): block
-    when 'li': li(attributes): block
-    when 'mark': mark(attributes): block
-    when 'nav': nav(attributes): block
-    when 'ol': ol(attributes): block
-    when 'p': p(attributes): block
-    when 'pre': pre(attributes): block
-    when 'q': q(attributes): block
-    when 's': s(attributes): block
-    when 'samp': samp(attributes): block
-    when 'section': section(attributes): block
-    when 'small': small(attributes): block
-    when 'span': span(attributes): block
-    when 'strong': strong(attributes): block
-    when 'sub': sub(attributes): block
-    when 'sup': sup(attributes): block
-    when 'table': table(attributes): block
-    when 'tbody': tbody(attributes): block
-    when 'td': td(attributes): block
-    when 'textarea': textarea(attributes): block
-    when 'tfoot': tfoot(attributes): block
-    when 'th': th(attributes): block
-    when 'thead': thead(attributes): block
-    when 'tr': tr(attributes): block
-    when 'u ': u (attributes): block
-    when 'ul': ul(attributes): block
-    when 'var': var(attributes): block
-    when 'hr': br(attributes)
-    when 'br': br(attributes)
-    when 'wbr': br(attributes)
+    when 'a': a&attributes(attributes): block
+    when 'abbr': abbr&attributes(attributes): block
+    when 'address': address&attributes(attributes): block
+    when 'article': article&attributes(attributes): block
+    when 'aside': aside&attributes(attributes): block
+    when 'b': b&attributes(attributes): block
+    when 'blockquote': blockquote&attributes(attributes): block
+    when 'body': body&attributes(attributes): block
+    when 'button': button&attributes(attributes): block
+    when 'caption': caption&attributes(attributes): block
+    when 'cite': cite&attributes(attributes): block
+    when 'code': code&attributes(attributes): block
+    when 'dd': dd&attributes(attributes): block
+    when 'del': del&attributes(attributes): block
+    when 'dfn': dfn&attributes(attributes): block
+    when 'dl': dl&attributes(attributes): block
+    when 'dt': dt&attributes(attributes): block
+    when 'em': em&attributes(attributes): block
+    when 'fieldset': fieldset&attributes(attributes): block
+    when 'footer': footer&attributes(attributes): block
+    when 'form': form&attributes(attributes): block
+    when 'h1': h1&attributes(attributes): block
+    when 'h2': h2&attributes(attributes): block
+    when 'h3': h3&attributes(attributes): block
+    when 'h4': h4&attributes(attributes): block
+    when 'h5': h5&attributes(attributes): block
+    when 'h6': h6&attributes(attributes): block
+    when 'header': header&attributes(attributes): block
+    when 'i': i&attributes(attributes): block
+    when 'ins': ins&attributes(attributes): block
+    when 'kbd': kbd&attributes(attributes): block
+    when 'label': label&attributes(attributes): block
+    when 'legend': legend&attributes(attributes): block
+    when 'li': li&attributes(attributes): block
+    when 'mark': mark&attributes(attributes): block
+    when 'nav': nav&attributes(attributes): block
+    when 'ol': ol&attributes(attributes): block
+    when 'p': p&attributes(attributes): block
+    when 'pre': pre&attributes(attributes): block
+    when 'q': q&attributes(attributes): block
+    when 's': s&attributes(attributes): block
+    when 'samp': samp&attributes(attributes): block
+    when 'section': section&attributes(attributes): block
+    when 'small': small&attributes(attributes): block
+    when 'span': span&attributes(attributes): block
+    when 'strong': strong&attributes(attributes): block
+    when 'sub': sub&attributes(attributes): block
+    when 'sup': sup&attributes(attributes): block
+    when 'table': table&attributes(attributes): block
+    when 'tbody': tbody&attributes(attributes): block
+    when 'td': td&attributes(attributes): block
+    when 'textarea': textarea&attributes(attributes): block
+    when 'tfoot': tfoot&attributes(attributes): block
+    when 'th': th&attributes(attributes): block
+    when 'thead': thead&attributes(attributes): block
+    when 'tr': tr&attributes(attributes): block
+    when 'u ': u &attributes(attributes): block
+    when 'ul': ul&attributes(attributes): block
+    when 'var': var&attributes(attributes): block
+    when 'hr': br&attributes(attributes)
+    when 'br': br&attributes(attributes)
+    when 'wbr': br&attributes(attributes)
     when 'img'
       //- If there is no title we don't need it to show even if there is some alt
       if attributes.alt && !attributes.title
@@ -120,11 +120,11 @@ mixin bemto_tag(tag)
       img(alt='', attributes)
     when 'input': input(type='text', attributes)
     when 'html'
-      !!! 5
-      html(attributes): block
-    default: div(attributes): block
-    //- Use interpolation here for non-tweaked tags when #659 and #660 are fixed
-    //-default: #{newTag}(attributes): block
+      doctype html
+      html&attributes(attributes): block
+    default: div&attributes(attributes): block
+  //- Use interpolation here for non-tweaked tags when #659 and #660 are fixed
+  //-default: #{newTag}&attributes(attributes): block
 
   //- Closing all the wrapper tails
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag != 'li'
@@ -171,7 +171,7 @@ mixin b(tag, isElement)
     //- Write modified classes to attributes in the correct order
     - attributes.class = bemto_classes.sort().join(' ')
 
-  +bemto_tag(tag)(attributes)
+  +bemto_tag(tag)&attributes(attributes)
     block
 
   //- Closing actions (remove the current block from the chain)
@@ -181,4 +181,4 @@ mixin b(tag, isElement)
 
 //- Element
 mixin e(tag)
-  +b(tag, true)(attributes): block
+  +b(tag, true)&attributes(attributes): block
