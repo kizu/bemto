@@ -117,8 +117,13 @@ mixin bemto_tag(tag)
       //- If we have title, we must have it in alt if it's not set
       if attributes.title && !attributes.alt
         - attributes.alt = attributes.title
-      img(alt='', attributes)
-    when 'input': input(type='text', attributes)
+      if !attributes.alt
+        - attributes.alt = ''
+      img&attributes(attributes)
+    when 'input'
+      if !attributes.type
+        - attributes.type = "text"
+      input&attributes(attributes)
     when 'html'
       doctype html
       html&attributes(attributes): block
