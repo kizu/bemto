@@ -1,4 +1,12 @@
-# Bemto — mixins for writing [BEM](http://bem.github.com/bem-method/pages/beginning/beginning.en.html)-style code for [Jade](https://github.com/visionmedia/jade).
+# Bemto — mixins for writing [BEM][]-style code for [Jade][] [![Build Status][build]][build-link] [![NPM version][version]][version-link]
+
+[BEM]: http://bem.github.com/bem-method/pages/beginning/beginning.en.html
+[Jade]: https://github.com/visionmedia/jade
+
+[build]: https://travis-ci.org/kizu/bemto.png?branch=master
+[build-link]: https://travis-ci.org/kizu/bemto
+[version]: https://badge.fury.io/js/bemto.jade.png
+[version-link]: http://badge.fury.io/js/bemto.jade
 
 ## Table of Contents
 
