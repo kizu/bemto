@@ -136,14 +136,16 @@ mixin bemto_tag(tag)
     | </li>
 
 //- Some global variables
-- var bemto_chain = []
-- var bemto_chain_contexts = ['block']
-- var bemto_regex_element =
+- var bemto_chain = [];
+- var bemto_chain_contexts = ['block'];
 //- Block
 mixin b(tag, isElement)
   //- Rewriting the class for elements and modifiers
   if attributes.class
-    - var bemto_classes = attributes.class.split(' ');
+    - var bemto_classes = attributes.class;
+    if bemto_classes instanceof Array
+      - bemto_classes = bemto_classes.join(' ');
+    - bemto_classes = bemto_classes.split(' ');
     - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings_element + '|' + bemto_settings_modifier +').)+)'))[1]
 
     if !isElement
