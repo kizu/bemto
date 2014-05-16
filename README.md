@@ -285,7 +285,7 @@ This is somewhat obvious, but I must mention that the bemto blocks would be grea
 
 ```Jade
 mixin link(url)
-  +b('span').link(attributes, href=url)
+  +b('span').link(href=url)&attributes(attributes)
     block
 ```
 
