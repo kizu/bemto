@@ -15,6 +15,7 @@ var cases = fs.readdirSync('test/cases').filter(function(file){
 
 cases.forEach(function(test){
   var name = test.replace(/[-.]/g, ' ');
+  if (!fs.existsSync('test/cases/' + test + '.html')) return;
   it(name, function(){
     var path = 'test/cases/' + test + '.jade';
     var str = fs.readFileSync(path, 'utf8');
