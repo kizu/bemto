@@ -47,6 +47,7 @@ mixin bemto_tag(tag)
   else
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'block';
 
+  //- Not using interpolation because of Jade wontfixed bugs
   case newTag
     when 'a': a&attributes(attributes): block
     when 'abbr': abbr&attributes(attributes): block
@@ -104,7 +105,7 @@ mixin bemto_tag(tag)
     when 'th': th&attributes(attributes): block
     when 'thead': thead&attributes(attributes): block
     when 'tr': tr&attributes(attributes): block
-    when 'u ': u &attributes(attributes): block
+    when 'u ': u&attributes(attributes): block
     when 'ul': ul&attributes(attributes): block
     when 'var': var&attributes(attributes): block
     when 'hr': br&attributes(attributes)
