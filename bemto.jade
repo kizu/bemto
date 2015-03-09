@@ -26,6 +26,8 @@ mixin bemto_tag(tag)
     - newTag = 'a';
   if attributes.for
     - newTag = 'label';
+  if attributes.type
+    - newTag = 'input';
   else if attributes.src
     - newTag = 'img';
 
