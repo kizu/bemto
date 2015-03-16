@@ -1,0 +1,15 @@
+# Bemto changelog
+
+## v0.2.0 (2015-03-16)
+
+- Removed (before undocummented) automixing of current block on element blocks.
+- Added auto inputs on `type` attribute, #38.
+- Added `<svg>` to supported tags, #39.
+
+## v0.1.1 (2015-03-03)
+
+- Fixed `<hr>` being replaced with `<br>`, #37.
+
+## v0.1.0 (2014-05-16)
+
+- Initial version
