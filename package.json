@@ -1,6 +1,6 @@
 {
   "name": "bemto.jade",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "./bemto.jade",
   "author": "Roman Komarov <kizu@kizu.ru>",
   "licence": "MIT",

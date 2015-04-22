@@ -1,5 +1,9 @@
 # Bemto changelog
 
+## v0.2.1 (2015-04-22)
+
+- Fixed `select` and `option` rendered as `div`s.
+
 ## v0.2.0 (2015-03-16)
 
 - Removed (before undocummented) automixing of current block on element blocks.

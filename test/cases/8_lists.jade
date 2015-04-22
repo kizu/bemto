@@ -1,7 +1,9 @@
 include ../../bemto
 
 +b('select').foo
-	option(value=0, label='bar')
+  option(value=0, label='bar') bar
+  +e(value=0, label='baz') baz
 
 +b('datalist').foo
-	option(value=0, label='bar')
+  option(value=0, label='bar') bar
+  +e('option')(value=0, label='baz') baz

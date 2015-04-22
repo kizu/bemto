@@ -20,6 +20,8 @@ mixin bemto_tag(tag)
       - newTag = 'span';
     else if bemto_chain_contexts[contextIndex-1] === 'list'
       - newTag = 'li';
+    else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
+      - newTag = 'option';
 
   //- Attributes context checks
   if attributes.href
@@ -46,6 +48,8 @@ mixin bemto_tag(tag)
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline';
   else if ['ul','ol'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'list';
+  else if ['select','datalist'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'optionlist';
   else
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'block';
 
@@ -89,6 +93,7 @@ mixin bemto_tag(tag)
     when 'mark': mark&attributes(attributes): block
     when 'nav': nav&attributes(attributes): block
     when 'ol': ol&attributes(attributes): block
+    when 'option': option&attributes(attributes): block
     when 'p': p&attributes(attributes): block
     when 'pre': pre&attributes(attributes): block
     when 'q': q&attributes(attributes): block
