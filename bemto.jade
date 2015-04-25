@@ -75,6 +75,8 @@ mixin bemto_tag(tag)
     when 'dt': dt&attributes(attributes): block
     when 'em': em&attributes(attributes): block
     when 'fieldset': fieldset&attributes(attributes): block
+    when 'figcaption': figcaption&attributes(attributes): block
+    when 'figure': figure&attributes(attributes): block
     when 'footer': footer&attributes(attributes): block
     when 'form': form&attributes(attributes): block
     when 'h1': h1&attributes(attributes): block
@@ -90,11 +92,13 @@ mixin bemto_tag(tag)
     when 'label': label&attributes(attributes): block
     when 'legend': legend&attributes(attributes): block
     when 'li': li&attributes(attributes): block
+    when 'main': main&attributes(attributes): block
     when 'mark': mark&attributes(attributes): block
     when 'nav': nav&attributes(attributes): block
     when 'ol': ol&attributes(attributes): block
     when 'option': option&attributes(attributes): block
     when 'p': p&attributes(attributes): block
+    when 'picture': picture&attributes(attributes): block
     when 'pre': pre&attributes(attributes): block
     when 'q': q&attributes(attributes): block
     when 's': s&attributes(attributes): block
@@ -102,6 +106,7 @@ mixin bemto_tag(tag)
     when 'section': section&attributes(attributes): block
     when 'select': select&attributes(attributes): block
     when 'small': small&attributes(attributes): block
+    when 'source': source&attributes(attributes): block
     when 'span': span&attributes(attributes): block
     when 'strong': strong&attributes(attributes): block
     when 'sub': sub&attributes(attributes): block
