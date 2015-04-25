@@ -106,7 +106,6 @@ mixin bemto_tag(tag)
     when 'section': section&attributes(attributes): block
     when 'select': select&attributes(attributes): block
     when 'small': small&attributes(attributes): block
-    when 'source': source&attributes(attributes): block
     when 'span': span&attributes(attributes): block
     when 'strong': strong&attributes(attributes): block
     when 'sub': sub&attributes(attributes): block
@@ -126,6 +125,7 @@ mixin bemto_tag(tag)
     when 'hr': hr&attributes(attributes)
     when 'br': br&attributes(attributes)
     when 'wbr': br&attributes(attributes)
+    when 'source': source&attributes(attributes)
     when 'img'
       //- If there is no title we don't need it to show even if there is some alt
       if attributes.alt && !attributes.title
