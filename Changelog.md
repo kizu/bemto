@@ -1,5 +1,9 @@
 # Bemto changelog
 
+## v0.2.2 (2015-05-05)
+
+- Fixed support for more html5 elements: `<figure>`, `<figcaption>`, `<main>`, `<picture>` and `<source/>`.
+
 ## v0.2.1 (2015-04-22)
 
 - Fixed `select` and `option` rendered as `div`s.
