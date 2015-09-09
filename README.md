@@ -232,19 +232,19 @@ There are some settings you can set for different syntaxes of BEM.
 For doing so, you must set them after including the `bemto` like this:
 
 ```Jade
-- bemto_settings_prefix = ''
-- bemto_settings_element = '__'
-- bemto_settings_modifier = '_'
+- bemto_settings['prefix'] = ''
+- bemto_settings['element'] = '__'
+- bemto_settings['modifier'] = '_'
 ```
 
 Here you can see all available settings with their default values.
 
 ### Adding Prefix
 
-If you'd like to prefix all your bemto-generated blocks, you can set the `bemto_settings_prefix` setting to something, so it would be added to the beginning of all your blocks. Like this:
+If you'd like to prefix all your bemto-generated blocks, you can set the `bemto_settings['prefix']` setting to something, so it would be added to the beginning of all your blocks. Like this:
 
 ```Jade
-- bemto_settings_prefix = 'b-'
+- bemto_settings['prefix'] = 'b-'
 
 +b.block
   +e.element foo
@@ -263,10 +263,10 @@ and that would then render as
 
 ### Setting for Element syntax
 
-If you don't like the default elements syntax with the `__` delimiter, you can set using the `bemto_settings_element` setting:
+If you don't like the default elements syntax with the `__` delimiter, you can set using the `bemto_settings['element']` setting:
 
 ```Jade
-- bemto_settings_element = '-'
+- bemto_settings['element'] = '-'
 
 +b.block
   +e.element foo
@@ -285,10 +285,10 @@ this would render to
 
 ### Setting for Modifier syntax
 
-If you'd like to use different modifier syntax, like the one Nicolas Gallagher mentioned in [his article](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/), you can use the `bemto_settings_modifier` setting:
+If you'd like to use different modifier syntax, like the one Nicolas Gallagher mentioned in [his article](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/), you can use the `bemto_settings['modifier']` setting:
 
 ```Jade
-- bemto_settings_modifier = '--'
+- bemto_settings['modifier'] = '--'
 
 +b.block--modifier-name.--other-modifier foo
 ```

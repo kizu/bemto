@@ -1,5 +1,9 @@
 # Bemto changelog
 
+## v1.0.0 (in development)
+
+- Changed the settings to be a single object and not a bunch of variables.
+
 ## v0.2.3 (2015-12-30)
 
 - Fixed the absence of the `time` tag.
