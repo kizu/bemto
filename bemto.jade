@@ -12,47 +12,47 @@
 //- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
 mixin bemto_tag(tag)
   //- rewriting tag name on different contexts
-  - var newTag = tag || bemto_settings['default_tag'];
-  - var contextIndex = bemto_chain_contexts.length;
+  - var newTag = tag || bemto_settings['default_tag']
+  - var contextIndex = bemto_chain_contexts.length
 
   //- Checks for contexts if no tag given
   if !tag
     if bemto_chain_contexts[contextIndex-1] === 'inline'
-      - newTag = 'span';
+      - newTag = 'span'
     else if bemto_chain_contexts[contextIndex-1] === 'list'
-      - newTag = 'li';
+      - newTag = 'li'
     else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
-      - newTag = 'option';
+      - newTag = 'option'
 
   //- Attributes context checks
   if attributes.href
-    - newTag = 'a';
+    - newTag = 'a'
   if attributes.for
-    - newTag = 'label';
+    - newTag = 'label'
   if attributes.type
-    - newTag = 'input';
+    - newTag = 'input'
   else if attributes.src
-    - newTag = 'img';
+    - newTag = 'img'
 
   //- Contextual wrappers
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
     | <li>
   else if bemto_chain_contexts[contextIndex-1] !== 'list' && bemto_chain_contexts[contextIndex-1] !== 'pseudo-list' && newTag === 'li'
     | <ul>
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'pseudo-list';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'pseudo-list'
   else if bemto_chain_contexts[contextIndex-1] === 'pseudo-list' && newTag !== 'li'
     | </ul>
-    - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
+    - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
 
   //- Setting context
   if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label','p','h1','h2','h3','h4','h5','h6','time'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline'
   else if ['ul','ol'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'list';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'list'
   else if ['select','datalist'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'optionlist';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'optionlist'
   else
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'block';
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'block'
 
   //- Not using interpolation because of Jade wontfixed bugs
   case newTag
@@ -154,22 +154,32 @@ mixin bemto_tag(tag)
     | </li>
 
 //- Some global variables
-- var bemto_chain = [];
-- var bemto_chain_contexts = ['block'];
+- var bemto_chain = []
+- var bemto_chain_contexts = ['block']
 //- Block
-mixin b(tag, isElement)
+mixin b(options)
   //- Rewriting the class for elements and modifiers
+  - var tag = options && options.tag || ''
+  - var isElement = options && options.isElement
   if attributes.class
-    - var bemto_classes = attributes.class;
+    //- Creating and normalizing bemto classes
+    - var bemto_classes = attributes.class
     if bemto_classes instanceof Array
-      - bemto_classes = bemto_classes.join(' ');
-    - bemto_classes = bemto_classes.split(' ');
-    - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings['element'] + '|' + bemto_settings['modifier'] +').)+)'))[1]
+      - bemto_classes = bemto_classes.join(' ')
+    - bemto_classes = bemto_classes.split(' ')
+
+    //- Catching the optional tag class
+    if bemto_classes[0].match(/^[A-Z-]+$/)
+      - tag = bemto_classes.shift().toLowerCase()
+
+    //- Catch the bemto block
+    if bemto_classes.length
+      - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings['element'] + '|' + bemto_settings['modifier'] +').)+)'))[1]
 
     if !isElement
       - bemto_chain[bemto_chain.length] = bemto_block
       - bemto_classes[0] = bemto_classes[0]
-    else
+    else if bemto_classes.length
       - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings['element'] + bemto_classes[0]
 
     - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings['element'] : '') + bemto_block
@@ -205,9 +215,11 @@ mixin b(tag, isElement)
 
   //- Closing actions (remove the current block from the chain)
   if !isElement
-    - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1);
-  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
+    - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
+  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
 
 //- Element
-mixin e(tag)
-  +b(tag, true)&attributes(attributes): block
+mixin e(options)
+  - options = options || {}
+  - options['isElement'] = true;
+  +b(options)&attributes(attributes): block

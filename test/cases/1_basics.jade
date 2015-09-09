@@ -10,5 +10,10 @@ include ../../bemto
 +b.block_foo._bar._baz
   +e.element_type_lol._mode_moddy Blah
 
+// Tag as first uppercase class
 p
-  +b('span').foo bar
+  +b.SPAN.foo bar
+
+// Tag as option
+p
+  +b({tag: 'span'}).foo baz

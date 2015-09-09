@@ -45,7 +45,7 @@
     +b.block1
       +e.element1 Foo
       +b.block2
-        +e('a')(href="#bar").element Bar
+        +e.A(href="#bar").element Bar
       +e.element2 Baz
     ```
 
@@ -155,13 +155,19 @@ this would render to
 
 ### Changing the tag name
 
-By default the blocks and elements render as `div`s. You can change it by passing the desired tag name as an argument:
+By default the blocks and elements render as `div`s. You can change it by passing the desired tag name as the first class in uppercase:
 
 ```Jade
-+b('span').foo bar
++b.SPAN.foo bar
 ```
 
-That would render as
+Or by passing an `options` object with a `tag` param:
+
+```Jade
++b({tag: 'span'})foo bar
+```
+
+Either way would render as
 
 ```HTML
 <span class="foo">bar</span>
@@ -173,7 +179,7 @@ Like any Jade tag or mixin, blocks and elements can take attributes that would g
 
 ```Jade
 +b.foo(title="Oh, it's a title")
-  +e('a').bar(href='#baz') baz
+  +e.A.bar(href='#baz') baz
 ```
 
 would render like
@@ -197,7 +203,7 @@ Look at the previous example: you have there some excess code that you can throw
 So, here is a bigger example:
 
 ```Jade
-+b('ul').list
++b.UL.list
   +b.list-item
     +e.link(href="foo")
       +e.text foo
@@ -307,7 +313,7 @@ This is somewhat obvious, but I must mention that the bemto blocks would be grea
 
 ```Jade
 mixin link(url)
-  +b('span').link(href=url)&attributes(attributes)
+  +b.SPAN.link(href=url)&attributes(attributes)
     block
 ```
 
