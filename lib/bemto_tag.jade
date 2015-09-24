@@ -65,7 +65,7 @@ mixin bemto_tag(tag)
       - attributes.type = "text"
 
   if newTag == 'html'
-    doctype html
+    <!DOCTYPE html>
 
   +bemto_custom_tag(newTag)&attributes(attributes)
     block
