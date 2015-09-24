@@ -7,6 +7,10 @@
 
 mixin bemto_custom_tag(customTag)
   - customTag = customTag || 'div'
+  - var selfClosing = false
+  if customTag.substr(-1) === '/'
+    - selfClosing = true
+    - customTag = customTag.slice(0, -1)
 
   case customTag
     //- Inline tags
@@ -37,4 +41,8 @@ mixin bemto_custom_tag(customTag)
     when 'input': input&attributes(attributes)
 
     //- Block-level tags (the same with interpolation)
-    default: #{customTag}&attributes(attributes): block
+    default
+      if selfClosing
+        #{customTag}&attributes(attributes)()/
+      else
+        #{customTag}&attributes(attributes): block
