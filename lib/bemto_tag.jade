@@ -1,0 +1,75 @@
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+include bemto_custom_tag
+
+//- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
+
+mixin bemto_tag(tag)
+  //- rewriting tag name on different contexts
+  - var newTag = tag || bemto_settings['default_tag']
+  - var contextIndex = bemto_chain_contexts.length
+
+  //- Checks for contexts if no tag given
+  if !tag
+    if bemto_chain_contexts[contextIndex-1] === 'inline'
+      - newTag = 'span'
+    else if bemto_chain_contexts[contextIndex-1] === 'list'
+      - newTag = 'li'
+    else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
+      - newTag = 'option'
+
+  //- Attributes context checks
+  if attributes.href
+    - newTag = 'a'
+  if attributes.for
+    - newTag = 'label'
+  if attributes.type
+    - newTag = 'input'
+  else if attributes.src
+    - newTag = 'img'
+
+  //- Contextual wrappers
+  if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
+    | <li>
+  else if bemto_chain_contexts[contextIndex-1] !== 'list' && bemto_chain_contexts[contextIndex-1] !== 'pseudo-list' && newTag === 'li'
+    | <ul>
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'pseudo-list'
+  else if bemto_chain_contexts[contextIndex-1] === 'pseudo-list' && newTag !== 'li'
+    | </ul>
+    - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
+
+  //- Setting context
+  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label','p','h1','h2','h3','h4','h5','h6'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline'
+  else if ['ul','ol'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'list'
+  else if ['select','datalist'].indexOf(newTag) !== -1
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'optionlist'
+  else
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'block'
+
+  if newTag == 'img'
+    //- If there is no title we don't need it to show even if there is some alt
+    if attributes.alt && !attributes.title
+      - attributes.title = ''
+    //- If we have title, we must have it in alt if it's not set
+    if attributes.title && !attributes.alt
+      - attributes.alt = attributes.title
+    if !attributes.alt
+      - attributes.alt = ''
+
+  if newTag == 'input'
+    if !attributes.type
+      - attributes.type = "text"
+
+  if newTag == 'html'
+    doctype html
+
+  +bemto_custom_tag(newTag)&attributes(attributes)
+    block
+
+  //- Closing all the wrapper tails
+  if bemto_chain_contexts[contextIndex-1] === 'list' && newTag != 'li'
+    | </li>

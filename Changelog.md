@@ -4,6 +4,7 @@
 
 - Changed the way the tag is passed: using either a first uppercase class or an option object.
 - Changed the settings to be a single object and not a bunch of variables.
+- Changed the way custom tag works, properly rendering unknown tags.
 
 ## v0.2.3 (2015-12-30)
 
