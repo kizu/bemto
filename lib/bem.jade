@@ -29,7 +29,7 @@ mixin b(options)
     if !isElement
       - bemto_chain[bemto_chain.length] = bemto_block
       - bemto_classes[0] = bemto_classes[0]
-    else if bemto_classes.length
+    else if bemto_classes.length && bemto_chain[bemto_chain.length-1]
       - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings['element'] + bemto_classes[0]
 
     - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings['element'] : '') + bemto_block
