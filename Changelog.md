@@ -6,6 +6,7 @@
 - Changed the settings to be a single object and not a bunch of variables.
 - Changed the way custom tag works, properly rendering unknown tags (including self-closing if defined in options).
 - Fixed the jade-bug-hardcoded doctype.
+- Fixed classless blocks
 
 ## v0.2.3 (2015-12-30)
 
