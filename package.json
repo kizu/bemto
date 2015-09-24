@@ -18,7 +18,7 @@
     "url": "git://github.com/kizu/bemto.git"
   },
   "devDependencies": {
-    "jade": "1.9.x",
+    "jade": "1.11.x",
     "mocha": "*",
     "should": "2.0.x"
   },
