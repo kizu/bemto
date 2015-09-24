@@ -14,3 +14,11 @@ include ../../bemto
 - bemto_settings['modifier'] = '--'
 
 +b.block--modifier-name.--other-modifier foo
+
+p
+  - bemto_settings['nosrc_substitute'] = '0.gif'
+  +b.IMG
+
+p
+  - bemto_settings['nosrc_substitute'] = false
+  +b.IMG

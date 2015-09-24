@@ -59,6 +59,11 @@ mixin bemto_tag(tag)
       - attributes.alt = attributes.title
     if !attributes.alt
       - attributes.alt = ''
+    if !attributes.src
+      if bemto_settings.nosrc_substitute === true
+        - attributes.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+      else if bemto_settings.nosrc_substitute
+        - attributes.src = bemto_settings.nosrc_substitute
 
   if newTag == 'input'
     if !attributes.type
