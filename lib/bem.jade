@@ -1,0 +1,75 @@
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+//- Some global variables
+- var bemto_chain = []
+- var bemto_chain_contexts = ['block']
+
+//- Block
+mixin b(options)
+  //- Rewriting the class for elements and modifiers
+  - var tag = options && options.tag || ''
+  - var isElement = options && options.isElement
+  if attributes.class
+    //- Creating and normalizing bemto classes
+    - var bemto_classes = attributes.class
+    if bemto_classes instanceof Array
+      - bemto_classes = bemto_classes.join(' ')
+    - bemto_classes = bemto_classes.split(' ')
+
+    //- Catching the optional tag class
+    if bemto_classes[0].match(/^[A-Z-]+$/)
+      - tag = bemto_classes.shift().toLowerCase()
+
+    //- Catch the bemto block
+    if bemto_classes.length
+      - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings['element'] + '|' + bemto_settings['modifier'] +').)+)'))[1]
+
+    if !isElement
+      - bemto_chain[bemto_chain.length] = bemto_block
+      - bemto_classes[0] = bemto_classes[0]
+    else if bemto_classes.length
+      - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings['element'] + bemto_classes[0]
+
+    - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings['element'] : '') + bemto_block
+
+    //- Adding the block if there is only modifier
+    - var has_modifier = false
+    each klass in bemto_classes
+      if klass.match(new RegExp('^' + current_block + '(?!' + bemto_settings['element'] + '[A-Za-z]' + ')' + bemto_settings['modifier'] + '[A-Za-z]'))
+        - has_modifier = true
+    if bemto_classes.indexOf(current_block) === -1 && has_modifier
+      - bemto_classes[bemto_classes.length] = current_block
+
+    each klass, i in bemto_classes
+      if klass.match(new RegExp('^(?!' + bemto_settings['element'] + ')' + bemto_settings['modifier']))
+        //- Expanding the modifiers
+        - bemto_classes[i] = current_block + klass
+      else if klass.match(new RegExp('^' + bemto_settings['element']))
+        //- Expanding the mixed in elements
+        if bemto_chain[bemto_chain.length-2]
+          - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + klass
+        else
+          - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + klass
+
+      //- Adding prefixes
+      if bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings['element'] + '|' + bemto_settings['modifier'] + '))'))
+        - bemto_classes[i] = bemto_settings['prefix'] + bemto_classes[i]
+
+    //- Write modified classes to attributes in the correct order
+    - attributes.class = bemto_classes.sort().join(' ')
+
+  +bemto_tag(tag)&attributes(attributes)
+    block
+
+  //- Closing actions (remove the current block from the chain)
+  if !isElement
+    - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
+  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
+
+//- Element
+mixin e(options)
+  - options = options || {}
+  - options['isElement'] = true;
+  +b(options)&attributes(attributes): block
