@@ -1,24 +1,27 @@
 include ../../bemto
 
-- bemto_settings['prefix'] = 'b-'
+- set_bemto_settings({ prefix: 'b-' })
 
 +b.block
   +e.element foo
 
-- bemto_settings['prefix'] = ''
-- bemto_settings['element'] = '-'
+-
+  set_bemto_settings({
+    prefix: '',
+    element: '-'
+  })
 
 +b.block
   +e.element foo
 
-- bemto_settings['modifier'] = '--'
+- set_bemto_settings({ modifier: '--' })
 
 +b.block--modifier-name.--other-modifier foo
 
 p
-  - bemto_settings['nosrc_substitute'] = '0.gif'
+  - set_bemto_settings({ nosrc_substitute: '0.gif' })
   +b.IMG
 
 p
-  - bemto_settings['nosrc_substitute'] = false
+  - set_bemto_settings({ nosrc_substitute: false })
   +b.IMG

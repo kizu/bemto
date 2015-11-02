@@ -1,0 +1,17 @@
+include ../../bemto
+
+- bemto_settings_prefix = 'b-'
+
++b.block
+  +e.element foo
+
+- bemto_settings_prefix = ''
+- bemto_settings_element = '-'
+
++b.block
+  +e.element foo
+
+- bemto_settings_modifier = '---'
+- set_bemto_settings({ modifier: '--' })
+
++b.block--modifier-name.--other-modifier foo

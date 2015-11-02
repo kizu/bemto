@@ -8,6 +8,8 @@
 
 //- Block
 mixin b(options)
+  - var settings = get_bemto_settings()
+
   //- Rewriting the class for elements and modifiers
   - var tag = options && options.tag || ( typeof options == 'string' ? options : '')
   - var isElement = options && options.isElement
@@ -24,31 +26,31 @@ mixin b(options)
 
     //- Catch the bemto block
     if bemto_classes.length
-      - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + bemto_settings['element'] + '|' + bemto_settings['modifier'] +').)+)'))
+      - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + settings['element'] + '|' + settings['modifier'] +').)+)'))
       - bemto_block = bemto_block && bemto_block[1]
 
     if !isElement
       - bemto_chain[bemto_chain.length] = bemto_block
       - bemto_classes[0] = bemto_classes[0]
     else if bemto_classes.length && bemto_chain[bemto_chain.length-1]
-      - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + bemto_settings['element'] + bemto_classes[0]
+      - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + settings['element'] + bemto_classes[0]
 
     if bemto_block
-      - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + bemto_settings['element'] : '') + bemto_block
+      - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + settings['element'] : '') + bemto_block
 
       //- Adding the block if there is only modifier
       - var has_modifier = false
       each klass in bemto_classes
-        if klass.match(new RegExp('^' + current_block + '(?!' + bemto_settings['element'] + '[A-Za-z]' + ')' + bemto_settings['modifier'] + '[A-Za-z]'))
+        if klass.match(new RegExp('^' + current_block + '(?!' + settings['element'] + '[A-Za-z]' + ')' + settings['modifier'] + '[A-Za-z]'))
           - has_modifier = true
       if bemto_classes.indexOf(current_block) === -1 && has_modifier
         - bemto_classes[bemto_classes.length] = current_block
 
       each klass, i in bemto_classes
-        if klass.match(new RegExp('^(?!' + bemto_settings['element'] + ')' + bemto_settings['modifier']))
+        if klass.match(new RegExp('^(?!' + settings['element'] + ')' + settings['modifier']))
           //- Expanding the modifiers
           - bemto_classes[i] = current_block + klass
-        else if klass.match(new RegExp('^' + bemto_settings['element']))
+        else if klass.match(new RegExp('^' + settings['element']))
           //- Expanding the mixed in elements
           if bemto_chain[bemto_chain.length-2]
             - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + klass
@@ -56,8 +58,8 @@ mixin b(options)
             - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + klass
 
         //- Adding prefixes
-        if bemto_classes[i] && bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + bemto_settings['element'] + '|' + bemto_settings['modifier'] + '))'))
-          - bemto_classes[i] = bemto_settings['prefix'] + bemto_classes[i]
+        if bemto_classes[i] && bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + settings['element'] + '|' + settings['modifier'] + '))'))
+          - bemto_classes[i] = settings['prefix'] + bemto_classes[i]
 
     //- Write modified classes to attributes in the correct order
     - attributes.class = bemto_classes.sort().join(' ')

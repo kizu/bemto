@@ -6,8 +6,11 @@ include ../../bemto
 +b.block__element
   | Hey
 
-- bemto_settings['element'] = '-'
-- bemto_settings['modifier'] = '--'
+-
+  set_bemto_settings({
+    element: '-',
+    modifier: '--'
+  })
 
 +b.block--modifier
   | Hey

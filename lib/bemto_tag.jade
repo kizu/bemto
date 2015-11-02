@@ -7,8 +7,10 @@ include bemto_custom_tag
 //- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
 
 mixin bemto_tag(tag)
+  - var settings = get_bemto_settings()
+
   //- rewriting tag name on different contexts
-  - var newTag = tag || bemto_settings['default_tag']
+  - var newTag = tag || settings['default_tag']
   - var contextIndex = bemto_chain_contexts.length
 
   //- Checks for contexts if no tag given
@@ -63,10 +65,10 @@ mixin bemto_tag(tag)
     if !attributes.alt
       - attributes.alt = ''
     if !attributes.src
-      if bemto_settings.nosrc_substitute === true
+      if settings.nosrc_substitute === true
         - attributes.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
-      else if bemto_settings.nosrc_substitute
-        - attributes.src = bemto_settings.nosrc_substitute
+      else if settings.nosrc_substitute
+        - attributes.src = settings.nosrc_substitute
 
   if newTag == 'input'
     if !attributes.type
