@@ -9,7 +9,7 @@
 //- Block
 mixin b(options)
   //- Rewriting the class for elements and modifiers
-  - var tag = options && options.tag || ''
+  - var tag = options && options.tag || ( typeof options == 'string' ? options : '')
   - var isElement = options && options.isElement
   if attributes.class
     //- Creating and normalizing bemto classes
