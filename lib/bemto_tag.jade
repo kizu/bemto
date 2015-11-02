@@ -21,14 +21,17 @@ mixin bemto_tag(tag)
       - newTag = 'option'
 
   //- Attributes context checks
-  if attributes.href
-    - newTag = 'a'
-  if attributes.for
-    - newTag = 'label'
-  if attributes.type
-    - newTag = 'input'
-  else if attributes.src
-    - newTag = 'img'
+  //- Only when no actual tag is given
+  if !tag || tag == 'span' || tag == 'div'
+    if attributes.href
+      - newTag = 'a'
+    if attributes.for
+      - newTag = 'label'
+    if attributes.type
+      //- TODO: Add more checks for different type value patterns
+      - newTag = block ? 'button' : 'input'
+    else if attributes.src
+      - newTag = 'img'
 
   //- Contextual wrappers
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
@@ -73,7 +76,8 @@ mixin bemto_tag(tag)
     <!DOCTYPE html>
 
   +bemto_custom_tag(newTag)&attributes(attributes)
-    block
+    if block
+      block
 
   //- Closing all the wrapper tails
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag != 'li'

@@ -62,8 +62,11 @@ mixin b(options)
     //- Write modified classes to attributes in the correct order
     - attributes.class = bemto_classes.sort().join(' ')
 
-  +bemto_tag(tag)&attributes(attributes)
-    block
+  if block
+    +bemto_tag(tag)&attributes(attributes)
+      block
+  else
+    +bemto_tag(tag)&attributes(attributes)
 
   //- Closing actions (remove the current block from the chain)
   if !isElement
