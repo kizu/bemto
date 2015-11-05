@@ -9,6 +9,9 @@
 //- Block
 mixin b(options)
   - var settings = get_bemto_settings()
+  //- TODO: should we make it generic way for other settings too?
+  if options && options.prefix !== undefined
+    - settings.prefix = options.prefix
 
   //- Rewriting the class for elements and modifiers
   - var tag = options && options.tag || ( typeof options == 'string' ? options : '')

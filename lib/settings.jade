@@ -15,6 +15,14 @@
 
   var get_bemto_settings = function() {
     var settings = bemto_settings;
+    //- TODO: make proper cloning?
+    var settings = {
+      'prefix': bemto_settings.prefix,
+      'element': bemto_settings.element,
+      'modifier': bemto_settings.modifier,
+      'default_tag': bemto_settings.default_tag,
+      'nosrc_substitute': bemto_settings.nosrc_substitute
+    };
     if (bemto_settings_prefix      !== undefined) { settings['prefix']      = bemto_settings_prefix;      }
     if (bemto_settings_element     !== undefined) { settings['element']     = bemto_settings_element;     }
     if (bemto_settings_modifier    !== undefined) { settings['modifier']    = bemto_settings_modifier;    }

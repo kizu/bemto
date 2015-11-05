@@ -2,6 +2,7 @@
 
 ## v1.0.0 (in development)
 
+- Added a way to redefine prefix on block/element level.
 - `src`-less images now would have null gif inlined (or set to the given src).
 - Changed the default way the tag is passed: using either a first uppercase class or an option object.
 - Changed the settings to be a single object and not a bunch of variables.
