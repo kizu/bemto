@@ -5,6 +5,28 @@
 //- This is a replacement for an interpolated tag,
 //- which is not possible due to Jade's wontfixed #659 and #660 bugs.
 
+mixin bemto_custom_inline_tag(customTag, self_closing)
+  - self_closing = self_closing || false
+  != '<'
+  = customTag
+  if attributes
+    - for (var attribute in attributes)
+      if attributes.hasOwnProperty(attribute) && attributes[attribute] !== undefined
+        = ' '
+        = attribute
+        != '="'
+        = attributes[attribute]
+        != '"'
+  if self_closing
+    != '/>'
+  else
+    != '>'
+    block
+    != '</'
+    = customTag
+    != '>'
+
+
 mixin bemto_custom_tag(customTag)
   - customTag = customTag || 'div'
   - var selfClosing = false
@@ -12,35 +34,13 @@ mixin bemto_custom_tag(customTag)
     - selfClosing = true
     - customTag = customTag.slice(0, -1)
 
-  case customTag
-    //- Inline tags
-    when 'a': a&attributes(attributes): block
-    when 'abbr': abbr&attributes(attributes): block
-    when 'acronym': acronym&attributes(attributes): block
-    when 'b': b&attributes(attributes): block
-    when 'code': code&attributes(attributes): block
-    when 'em': em&attributes(attributes): block
-    when 'font': font&attributes(attributes): block
-    when 'i': i&attributes(attributes): block
-    when 'ins': ins&attributes(attributes): block
-    when 'kbd': kbd&attributes(attributes): block
-    when 'map': map&attributes(attributes): block
-    when 'samp': samp&attributes(attributes): block
-    when 'small': small&attributes(attributes): block
-    when 'span': span&attributes(attributes): block
-    when 'strong': strong&attributes(attributes): block
-    when 'sub': sub&attributes(attributes): block
-    when 'sup': sup&attributes(attributes): block
+  case get_bemto_tag_type(customTag)
+    when 'inline'
+      +bemto_custom_inline_tag(customTag)&attributes(attributes): block
+    when 'self_closing'
+      +bemto_custom_inline_tag(customTag, true)&attributes(attributes)
 
-    //- Self-closing tags
-    when 'hr': hr&attributes(attributes)
-    when 'br': br&attributes(attributes)
-    when 'wbr': br&attributes(attributes)
-    when 'source': source&attributes(attributes)
-    when 'img': img&attributes(attributes)
-    when 'input': input&attributes(attributes)
-
-    //- Block-level tags (the same with interpolation)
+    //- Block-level tags
     default
       if selfClosing
         #{customTag}&attributes(attributes)()/

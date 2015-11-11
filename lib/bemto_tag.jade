@@ -2,6 +2,7 @@
 //- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
 //- MIT Licensed
 
+include tag_metadata
 include bemto_custom_tag
 
 //- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
@@ -46,14 +47,7 @@ mixin bemto_tag(tag)
     - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
 
   //- Setting context
-  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label','p','h1','h2','h3','h4','h5','h6'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline'
-  else if ['ul','ol'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'list'
-  else if ['select','datalist'].indexOf(newTag) !== -1
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'optionlist'
-  else
-    - bemto_chain_contexts[bemto_chain_contexts.length] = 'block'
+  - bemto_chain_contexts[bemto_chain_contexts.length] = get_bemto_tag_content_type(newTag)
 
   if newTag == 'img'
     //- If there is no title we don't need it to show even if there is some alt

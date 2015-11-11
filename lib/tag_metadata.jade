@@ -1,0 +1,131 @@
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+-
+  var get_bemto_tag_type = function(tagName) {
+    var result = 'block'
+    if (bemto_tag_metadata[tagName]) {
+      result = bemto_tag_metadata[tagName].type || result;
+    }
+    return result;
+  }
+
+  var get_bemto_tag_content_type = function(tagName) {
+    var result = 'block'
+    if (bemto_tag_metadata[tagName]) {
+      result = bemto_tag_metadata[tagName].content_type || bemto_tag_metadata[tagName].type || result;
+    }
+    return result;
+  }
+
+  var bemto_tag_metadata = {
+    'hr': {
+      'type': 'self_closing'
+    },
+    'br': {
+      'type': 'self_closing'
+    },
+    'wbr': {
+      'type': 'self_closing'
+    },
+    'source': {
+      'type': 'self_closing'
+    },
+    'img': {
+      'type': 'self_closing'
+    },
+    'input': {
+      'type': 'self_closing'
+    },
+    'a': {
+      'type': 'inline'
+    },
+    'abbr': {
+      'type': 'inline'
+    },
+    'acronym': {
+      'type': 'inline'
+    },
+    'b': {
+      'type': 'inline'
+    },
+    'code': {
+      'type': 'inline'
+    },
+    'em': {
+      'type': 'inline'
+    },
+    'font': {
+      'type': 'inline'
+    },
+    'i': {
+      'type': 'inline'
+    },
+    'ins': {
+      'type': 'inline'
+    },
+    'kbd': {
+      'type': 'inline'
+    },
+    'map': {
+      'type': 'inline'
+    },
+    'samp': {
+      'type': 'inline'
+    },
+    'small': {
+      'type': 'inline'
+    },
+    'span': {
+      'type': 'inline'
+    },
+    'strong': {
+      'type': 'inline'
+    },
+    'sub': {
+      'type': 'inline'
+    },
+    'sup': {
+      'type': 'inline'
+    },
+    'time': {
+      'type': 'inline'
+    },
+    'label': {
+      'content_type': 'inline'
+    },
+    'p': {
+      'content_type': 'inline'
+    },
+    'h1': {
+      'content_type': 'inline'
+    },
+    'h2': {
+      'content_type': 'inline'
+    },
+    'h3': {
+      'content_type': 'inline'
+    },
+    'h4': {
+      'content_type': 'inline'
+    },
+    'h5': {
+      'content_type': 'inline'
+    },
+    'h6': {
+      'content_type': 'inline'
+    },
+    'ul': {
+      'content_type': 'list'
+    },
+    'ol': {
+      'content_type': 'list'
+    },
+    'select': {
+      'content_type': 'optionlist'
+    },
+    'datalist': {
+      'content_type': 'optionlist'
+    }
+  }

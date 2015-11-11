@@ -65,7 +65,7 @@ mixin b(options)
           - bemto_classes[i] = settings['prefix'] + bemto_classes[i]
 
     //- Write modified classes to attributes in the correct order
-    - attributes.class = bemto_classes.sort().join(' ')
+    - attributes.class = bemto_classes.sort().join(' ') || undefined
 
   if block
     +bemto_tag(tag)&attributes(attributes)
