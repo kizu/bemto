@@ -1,5 +1,11 @@
 # Bemto changelog
 
+## v0.2.3 (2015-12-05)
+
+- Update `readme.md`  with example of using shorter modifier („no-namespace“ style) syntax.
+- Add the ability to change the default prefix using `+prefix-scope`.
+- Fixed support for `<time>` html5 element.
+
 ## v0.2.2 (2015-05-05)
 
 - Fixed support for more html5 elements: `<figure>`, `<figcaption>`, `<main>`, `<picture>` and `<source/>`.
