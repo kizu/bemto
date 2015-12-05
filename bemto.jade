@@ -44,7 +44,7 @@ mixin bemto_tag(tag)
     - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1);
 
   //- Setting context
-  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label','p','h1','h2','h3','h4','h5','h6'].indexOf(newTag) !== -1
+  if ['a','abbr','acronym','b','br','code','em','font','i','img','ins','kbd','map','samp','small','span','strong','sub','sup','label','p','h1','h2','h3','h4','h5','h6','time'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'inline';
   else if ['ul','ol'].indexOf(newTag) !== -1
     - bemto_chain_contexts[bemto_chain_contexts.length] = 'list';
@@ -118,6 +118,7 @@ mixin bemto_tag(tag)
     when 'tfoot': tfoot&attributes(attributes): block
     when 'th': th&attributes(attributes): block
     when 'thead': thead&attributes(attributes): block
+    when 'time': time&attributes(attributes): block
     when 'tr': tr&attributes(attributes): block
     when 'u ': u&attributes(attributes): block
     when 'ul': ul&attributes(attributes): block
