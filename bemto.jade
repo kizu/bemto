@@ -209,3 +209,10 @@ mixin b(tag, isElement)
 //- Element
 mixin e(tag)
   +b(tag, true)&attributes(attributes): block
+
+//- Custom prefixes
+mixin prefix-scope(prefix)
+  - old_prefix = bemto_settings_prefix
+  - bemto_settings_prefix = prefix
+  block
+  - bemto_settings_prefix = old_prefix

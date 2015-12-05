@@ -247,6 +247,28 @@ and that would then render as
 </div>
 ```
 
+### Custom Prefixes
+
+In case you need to change the default prefix name, you can set new prefix-scope like this:
+
+```Jade
+- bemto_settings_prefix = 'b-'
+
++b.block
+  +prefix-scope('js-')
+    +b.block2
+```
+
+would render to
+
+```HTML
+<div class="b-block">
+  <div class="js-block2">
+  </div>
+</div>
+```
+
+
 ### Setting for Element syntax
 
 If you don't like the default elements syntax with the `__` delimiter, you can set using the `bemto_settings_element` setting:
