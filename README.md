@@ -139,6 +139,20 @@ and that would render as
 </div>
 ```
 
+You can also use shorter modifier syntax like `class="block -modifier"`
+
+```Jade
++b.-foo.-bar.-baz
+```
+
+this would render to
+
+```HTML
+<div class="block -foo -bar -baz">
+</div>
+```
+
+
 ### Changing the tag name
 
 By default the blocks and elements render as `div`s. You can change it by passing the desired tag name as an argument:
