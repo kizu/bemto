@@ -365,6 +365,35 @@ This would render with the nested element:
 </div>
 ```
 
+### Scope for the settings
+
+If you'll need to have some settings just in a certain scope, you can wrap your code in `bemto_scope` mixin, passing your desired settings right into it:
+
+```Jade
++b.foo_bar
+  +bemto_scope({
+      prefix: 'b-',
+      element: '-',
+      modifier: '--'
+    })
+    +b.nnnn
+      +e.mmmm--kkkk
+  +e.baz
+```
+
+Would render as
+
+```HTML
+<div class="foo foo_bar">
+  <div class="b-nnnn">
+    <div class="b-nnnn-mmmm b-nnnn-mmmm--kkkk">
+    </div>
+  </div>
+  <div class="foo__baz">
+  </div>
+</div>
+```
+
 ## Using for building complex mixins
 
 This is somewhat obvious, but I must mention that the bemto blocks would be great for using as the bricks for building more complex blocks. The Jade mixins work in the way where you can translate any attributes through to the any inner blocks. So you can do this:
