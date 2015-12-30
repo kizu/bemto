@@ -80,6 +80,9 @@ mixin b(options)
 
 //- Element
 mixin e(options)
-  - options = options || {}
-  - options['isElement'] = true;
+  if options && typeof options == 'string'
+    - options = { 'tag': options }
+  else
+    - options = options || {}
+  - options['isElement'] = true
   +b(options)&attributes(attributes): block
