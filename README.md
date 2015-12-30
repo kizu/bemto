@@ -139,7 +139,7 @@ and that would render as
 </div>
 ```
 
-You can also use shorter modifier syntax like `class="block -modifier"`
+You can also use shorter modifier syntax like `class="block -modifier"` (but only when this syntax won't be used for delimiting full modifiers or elements).
 
 ```Jade
 +b.-foo.-bar.-baz
