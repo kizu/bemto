@@ -104,6 +104,24 @@ This would render like
 </div>
 ```
 
+#### Context of the element
+
+Note that bemto uses the first classname of the block as a context for further elements. If you'd like to use another class without changing the order, you can mark it with `__` in the end:
+
+```Jade
++b.foo.bar__
+  +e.baz
+```
+
+This way instead of `foo` bemto would base the nested elements from the `bar`:
+
+```HTML
+<div class="foo bar">
+  <div class="bar__baz">
+  </div>
+</div>
+```
+
 ### Modifiers
 
 “Modifier” is a state of the block or element. It is often written with the addition of it's type and/or value after the single underscore like `block_mode_foo` or just `block_foo`. However, at the most cases, the block must contain either the original block/element's class, either the modifier class.
@@ -307,6 +325,43 @@ and that would expand to
 ```HTML
 <div class="block block--modifier-name block--other-modifier">
   foo
+</div>
+```
+
+### Setting for allowing nested elements
+
+There can be cases when you could want to make elements of elements, i.e. when using element names instead of block names:
+
+```Jade
++b.block-element
+  +e.element2
+```
+
+renders by default to
+
+```HTML
+
+<div class="foo__bar">
+  <div class="foo__baz">
+  </div>
+</div>
+```
+
+If you'd like to have `foo__bar__baz` in the output instead, you can set the `flat_elements` to `false`:
+
+```Jade
+- set_bemto_settings({ flat_elements: false })
+
++b.foo__bar
+  +e.baz
+```
+
+This would render with the nested element:
+
+```HTML
+<div class="foo__bar">
+  <div class="foo__bar__baz">
+  </div>
 </div>
 ```
 

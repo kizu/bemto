@@ -3,13 +3,16 @@
 ## v1.0.0 (in development)
 
 - Added a way to redefine prefix on block/element level.
+- Added a `flat_elements` setting to allow elements of elements.
 - `src`-less images now would have null gif inlined (or set to the given src).
 - Changed the default way the tag is passed: using either a first uppercase class or an option object.
 - Changed the settings to be a single object and not a bunch of variables.
 - Changed the way custom tag works, properly rendering unknown tags (including self-closing if defined in options).
 - Changed the way attribute-implied tags are handled.
+- Changed the order of the classes in output (was: alphabet, now: the same as in source).
 - Fixed the jade-bug-hardcoded doctype.
 - Fixed classless blocks.
+- Fixed modifiers on elements with certain separators defined.
 - Added Code of Conduct.
 
 ## v0.2.3 (2015-12-30)

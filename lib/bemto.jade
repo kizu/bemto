@@ -23,49 +23,102 @@ mixin b(options)
       - bemto_classes = bemto_classes.join(' ')
     - bemto_classes = bemto_classes.split(' ')
 
-    //- Catching the optional tag class
-    if bemto_classes[0].match(/^[A-Z-]+$/)
-      - tag = bemto_classes.shift().toLowerCase()
 
-    //- Catch the bemto block
-    if bemto_classes.length
-      - var bemto_block = bemto_classes[0].match(new RegExp('^(((?!' + settings['element'] + '|' + settings['modifier'] +').)+)'))
-      - bemto_block = bemto_block && bemto_block[1]
+    - var bemto_objects = []
+    - var is_first_object = true
+    - var new_context = []
 
-    if !isElement
-      - bemto_chain[bemto_chain.length] = bemto_block
-      - bemto_classes[0] = bemto_classes[0]
-    else if bemto_classes.length && bemto_chain[bemto_chain.length-1]
-      - bemto_classes[0] = bemto_chain[bemto_chain.length-1] + settings['element'] + bemto_classes[0]
+    each klass, i in bemto_classes
+      - var bemto_object = {}
+      - var prev_object = bemto_objects[bemto_objects.length - 1]
+      - var sets_context = false
 
-    if bemto_block
-      - var current_block = (isElement ? bemto_chain[bemto_chain.length-1] + settings['element'] : '') + bemto_block
+      //- Catching the optional tag class
+      if klass.match(/^[A-Z-]+$/)
+        - tag = klass.toLowerCase()
+        - continue
 
-      //- Adding the block if there is only modifier
-      - var has_modifier = false
-      each klass in bemto_classes
-        if klass.match(new RegExp('^' + current_block + '(?!' + settings['element'] + '[A-Za-z]' + ')' + settings['modifier'] + '[A-Za-z]'))
-          - has_modifier = true
-      if bemto_classes.indexOf(current_block) === -1 && has_modifier
-        - bemto_classes[bemto_classes.length] = current_block
 
-      each klass, i in bemto_classes
-        if klass.match(new RegExp('^(?!' + settings['element'] + ')' + settings['modifier']))
-          //- Expanding the modifiers
-          - bemto_classes[i] = current_block + klass
-        else if klass.match(new RegExp('^' + settings['element']))
-          //- Expanding the mixed in elements
-          if bemto_chain[bemto_chain.length-2]
-            - bemto_classes[i] = bemto_chain[bemto_chain.length-2] + klass
-          else
-            - bemto_classes[i] = bemto_chain[bemto_chain.length-1] + klass
+      //- Use block as a context for the first class if we're at element
+      if is_first_object && isElement
+        - bemto_object['context'] = bemto_chain[bemto_chain.length - 1]
 
-        //- Adding prefixes
-        if bemto_classes[i] && bemto_classes[i].match(new RegExp('^' + current_block + '($|(?=' + settings['element'] + '|' + settings['modifier'] + '))'))
-          - bemto_classes[i] = settings['prefix'] + bemto_classes[i]
 
-    //- Write modified classes to attributes in the correct order
-    - attributes.class = bemto_classes.sort().join(' ') || undefined
+      //- If the class is a modifier, add it to the previous object
+      - var modifier_class = klass.match(new RegExp('^(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + '(.+)$'))
+      //- FIXME: `+b._mod._mod` — raw classes should be treated as raw ones
+      if modifier_class && prev_object && prev_object.name
+        if !prev_object['modifiers']
+          - prev_object['modifiers'] = []
+        - prev_object.modifiers.push(modifier_class[1])
+        - continue
+
+
+      //- Use block as a context for the following classes if we have element delimiter at the start
+      - var element_class = klass.match(new RegExp('^(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '(.+)$'))
+      if element_class
+        - bemto_object['context'] = bemto_chain[bemto_chain.length - 1]
+        - klass = element_class[1]
+
+
+      //- Set custom context for nested items
+      - var name_with_context = klass.match(new RegExp('^(.*[A-Za-z0-9])(?!' + settings['modifier'] + '$)' + settings['element'] + '$'))
+      if name_with_context
+        - klass = name_with_context[1]
+        - bemto_object['is_context'] = true
+        - sets_context = true
+
+
+      //- Apply the modifier from the classname if exist
+      - var name_with_modifier = klass.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + '(.+)$'))
+      if name_with_modifier
+        - klass = name_with_modifier[1]
+
+        if !bemto_object['modifiers']
+          - bemto_object['modifiers'] = []
+        - bemto_object.modifiers.push(name_with_modifier[2])
+
+
+      if sets_context && klass.match('^[a-zA-Z0-9]+.*')
+        - new_context.push(bemto_object.context ? (bemto_object.context + settings['element'] + klass) : klass)
+
+      - bemto_object['name'] = klass
+      - is_first_object = false
+      - bemto_objects.push(bemto_object)
+
+    //- If no custom context is set, use the first proper object
+    if !isElement && !new_context.length && bemto_objects[0] && bemto_objects[0].name && bemto_objects[0].name.match('^[a-zA-Z0-9]+.*')
+      - bemto_objects[0]['is_context'] = true
+      - new_context.push(bemto_objects[0].context ? (bemto_objects[0].context + settings['element'] + bemto_objects[0].name) : bemto_objects[0].name)
+
+    if new_context.length
+      //- FIXME: do proper contexts merging?
+      - new_context = new_context.join('')
+
+      //- Use only the block's name for context if we're at strict setting
+      if settings.flat_elements
+        - var context_with_element = new_context.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '.+$'))
+        if context_with_element
+          - new_context = context_with_element[1]
+
+      - bemto_chain[bemto_chain.length] = new_context
+
+
+    if bemto_objects.length
+      - var new_classes = []
+      each bemto_object in bemto_objects
+        if bemto_object.name
+          - var prefix = settings['prefix']
+          if bemto_object.context
+            - prefix += bemto_object.context + settings['element']
+          - new_classes.push(prefix + bemto_object.name)
+          if bemto_object.modifiers
+            each modifier in bemto_object.modifiers
+              - new_classes.push(prefix + bemto_object.name + settings['modifier'] + modifier)
+
+      - attributes.class = new_classes.join(' ')
+    else
+      - attributes.class = undefined
 
   if block
     +bemto_tag(tag)&attributes(attributes)

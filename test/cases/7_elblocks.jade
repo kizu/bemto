@@ -21,3 +21,23 @@ include ../../bemto
 +b.block-element
   +e.element2
     | Hey
+
++b.block
+  +b.-element
+    +e.element2
+      | Hey
+
+
+-
+  set_bemto_settings({
+    flat_elements: false
+  })
+
++b.block-element
+  +e.element2
+    | Hey
+
++b.block
+  +b.-element
+    +e.element2
+      | Hey

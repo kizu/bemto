@@ -8,7 +8,8 @@
     'element': '__',
     'modifier': '_',
     'default_tag': 'div',
-    'nosrc_substitute': true
+    'nosrc_substitute': true,
+    'flat_elements': true
   }
 
   var bemto_settings = default_bemto_settings;
@@ -21,7 +22,8 @@
       'element': bemto_settings.element,
       'modifier': bemto_settings.modifier,
       'default_tag': bemto_settings.default_tag,
-      'nosrc_substitute': bemto_settings.nosrc_substitute
+      'nosrc_substitute': bemto_settings.nosrc_substitute,
+      'flat_elements': bemto_settings.flat_elements
     };
     if (bemto_settings_prefix      !== undefined) { settings['prefix']      = bemto_settings_prefix;      }
     if (bemto_settings_element     !== undefined) { settings['element']     = bemto_settings_element;     }
