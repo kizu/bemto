@@ -432,7 +432,7 @@ And that would render to
 <span class="link">Ah, I'm not a link</span>
 
 <a class="link" href="https://github.com">
-  <img alt="" class="link__icon" src="http://favicon.yandex.net/favicon/github.com"/>
+  <img alt="" role="presentation" class="link__icon" src="http://favicon.yandex.net/favicon/github.com"/>
   <span class="link__text">Github</span>
 </a>
 ```
