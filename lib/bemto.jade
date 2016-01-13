@@ -84,7 +84,14 @@ mixin b(options)
 
       - bemto_object['name'] = klass
       - is_first_object = false
-      - bemto_objects.push(bemto_object)
+
+      if bemto_object.context && bemto_object.context.length > 1
+        each subcontext, i in bemto_object.context
+          - var sub_object = clone(bemto_object)
+          - sub_object['context'] = [subcontext]
+          - bemto_objects.push(sub_object)
+      else
+        - bemto_objects.push(bemto_object)
 
     //- If no custom context is set, use the first proper object
     if !isElement && !new_context.length && bemto_objects[0] && bemto_objects[0].name && bemto_objects[0].name.match('^[a-zA-Z0-9]+.*')
@@ -92,18 +99,16 @@ mixin b(options)
       - new_context.push(bemto_objects[0].context ? (bemto_objects[0].context + settings['element'] + bemto_objects[0].name) : bemto_objects[0].name)
 
     if new_context.length
-      //- FIXME: do proper contexts merging?
-      - new_context = new_context.join('')
-
       //- Use only the block's name for context if we're at strict setting
       if settings.flat_elements
-        - var context_with_element = new_context.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '.+$'))
-        if context_with_element
-          - new_context = context_with_element[1]
+        each subcontext, i in new_context
+          - var context_with_element = subcontext.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '.+$'))
+          if context_with_element
+            - new_context[i] = context_with_element[1]
 
       - bemto_chain[bemto_chain.length] = new_context
 
-
+    //- Rendering the classes
     if bemto_objects.length
       - var new_classes = []
       each bemto_object in bemto_objects
