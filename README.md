@@ -394,6 +394,34 @@ Would render as
 </div>
 ```
 
+### Setting for the output syntax of the elements/modifiers
+
+If you'd like to use different syntax of the element/modifier delimiter in jade source and the html output, you can use the `ouput_element` and `output_modifier` settings, otherwise the same delimiter as in the `element` and `modifier` settings would be used.
+
+```Jade
+-
+  set_bemto_settings({
+    element: '-',
+    modifier: '--',
+    output_element: '__',
+    output_modifier: '_'
+  })
+
++b.block.block2-
+  +e.element--modifier foo
+```
+
+would output
+
+```HTML
+<div class="block block2">
+  <div class="block2__element block2__element_modifier">foo
+  </div>
+</div>
+```
+
+You can see how the source uses the `-` for element and `--` for modifier, but the result gets `__` and `_` instead.
+
 ## Using for building complex mixins
 
 This is somewhat obvious, but I must mention that the bemto blocks would be great for using as the bricks for building more complex blocks. The Jade mixins work in the way where you can translate any attributes through to the any inner blocks. So you can do this:

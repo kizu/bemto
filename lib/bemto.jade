@@ -108,13 +108,13 @@ mixin b(options)
       - var new_classes = []
       each bemto_object in bemto_objects
         if bemto_object.name
-          - var prefix = settings['prefix']
+          - var prefix = settings.prefix
           if bemto_object.context
-            - prefix += bemto_object.context + settings['element']
+            - prefix += bemto_object.context + settings.output_element
           - new_classes.push(prefix + bemto_object.name)
           if bemto_object.modifiers
             each modifier in bemto_object.modifiers
-              - new_classes.push(prefix + bemto_object.name + settings['modifier'] + modifier)
+              - new_classes.push(prefix + bemto_object.name + settings.output_modifier + modifier)
 
       - attributes.class = new_classes.join(' ')
     else

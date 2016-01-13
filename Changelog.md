@@ -7,6 +7,7 @@
 - Added a `flat_elements` setting to allow elements of elements.
 - Add a `role="presentation"` for links with empty `alt`, via [Estelle Weyl](https://twitter.com/estellevw/status/685332992227540992).
 - Add a `role="main"` for the `<main>` tag.
+- Added `output_element` and `output_modifier` for changing the syntax of the output delimiters.
 - `src`-less images now would have null gif inlined (or set to the given src).
 - Changed the default way the tag is passed: using either a first uppercase class or an option object.
 - Changed the settings to be a single object and not a bunch of variables.

@@ -47,6 +47,8 @@
     'flat_elements': true
   }
 
+  var bemto_output_settings = ['element', 'modifier'];
+
   var bemto_settings = default_bemto_settings;
 
   var get_bemto_settings = function() {
@@ -55,6 +57,14 @@
     if (bemto_settings_element     !== undefined) { settings['element']     = bemto_settings_element;     }
     if (bemto_settings_modifier    !== undefined) { settings['modifier']    = bemto_settings_modifier;    }
     if (bemto_settings_default_tag !== undefined) { settings['default_tag'] = bemto_settings_default_tag; }
+
+    for (var i = 0; i < bemto_output_settings.length; i++) {
+      var setting = bemto_output_settings[i];
+      if (settings['output_' + setting] === undefined) {
+        settings['output_' + setting] = settings[setting];
+      }
+    };
+
     return settings;
   }
 
