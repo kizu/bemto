@@ -4,10 +4,10 @@ include ../../bemto
   +e('a').bar(href='#baz') baz
 
 p
-  +b.image(src="foo.png")
+  +b('img').image(src="foo.png")
 
 p
-  +b.image(src="foo.png", alt="no title here")
+  +b('img').image(src="foo.png", alt="no title here")
 
 p
-  +b.image(src="foo.png", title="alt is a cloned title")
+  +b('img').image(src="foo.png", title="alt is a cloned title")

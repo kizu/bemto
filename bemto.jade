@@ -24,10 +24,11 @@ mixin bemto_tag(tag)
       - newTag = 'option';
 
     //- Attributes context checks
-    if attributes.href
-      - newTag = 'a';
-    if attributes.for
-      - newTag = 'label';
+  if attributes.href
+    - newTag = 'a';
+  if attributes.for
+    - newTag = 'label';
+  if !tag
     if attributes.type
       - newTag = 'input';
     else if attributes.src
