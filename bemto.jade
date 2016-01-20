@@ -23,15 +23,15 @@ mixin bemto_tag(tag)
     else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
       - newTag = 'option';
 
-  //- Attributes context checks
-  if attributes.href
-    - newTag = 'a';
-  if attributes.for
-    - newTag = 'label';
-  if attributes.type
-    - newTag = 'input';
-  else if attributes.src
-    - newTag = 'img';
+    //- Attributes context checks
+    if attributes.href
+      - newTag = 'a';
+    if attributes.for
+      - newTag = 'label';
+    if attributes.type
+      - newTag = 'input';
+    else if attributes.src
+      - newTag = 'img';
 
   //- Contextual wrappers
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
