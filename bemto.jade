@@ -23,15 +23,16 @@ mixin bemto_tag(tag)
     else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
       - newTag = 'option';
 
-  //- Attributes context checks
+    //- Attributes context checks
   if attributes.href
     - newTag = 'a';
   if attributes.for
     - newTag = 'label';
-  if attributes.type
-    - newTag = 'input';
-  else if attributes.src
-    - newTag = 'img';
+  if !tag
+    if attributes.type
+      - newTag = 'input';
+    else if attributes.src
+      - newTag = 'img';
 
   //- Contextual wrappers
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
@@ -87,6 +88,7 @@ mixin bemto_tag(tag)
     when 'h6': h6&attributes(attributes): block
     when 'header': header&attributes(attributes): block
     when 'i': i&attributes(attributes): block
+    when 'iframe': iframe&attributes(attributes): block
     when 'ins': ins&attributes(attributes): block
     when 'kbd': kbd&attributes(attributes): block
     when 'label': label&attributes(attributes): block
