@@ -17,6 +17,7 @@
 - Fixed the jade-bug-hardcoded doctype.
 - Fixed classless blocks.
 - Fixed modifiers on elements with certain separators defined.
+- Fixed the blockness of a textarea and a pre tags to prevent from extra whitespace to appear inside.
 - Added Code of Conduct.
 
 ## v0.2.3 (2015-12-30)
