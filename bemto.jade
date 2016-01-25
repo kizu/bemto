@@ -7,6 +7,7 @@
 - var bemto_settings_element = '__'
 - var bemto_settings_modifier = '_'
 - var bemto_settings_default_tag = 'div'
+- var bemto_settings_context_replace = true
 
 //- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
 mixin bemto_tag(tag)
@@ -15,13 +16,14 @@ mixin bemto_tag(tag)
   - var contextIndex = bemto_chain_contexts.length;
 
   //- Checks for contexts if no tag given
-  if !tag
-    if bemto_chain_contexts[contextIndex-1] === 'inline'
-      - newTag = 'span';
-    else if bemto_chain_contexts[contextIndex-1] === 'list'
-      - newTag = 'li';
-    else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
-      - newTag = 'option';
+  if bemto_settings_context_replace
+    if !tag
+      if bemto_chain_contexts[contextIndex-1] === 'inline'
+        - newTag = 'span';
+      else if bemto_chain_contexts[contextIndex-1] === 'list'
+        - newTag = 'li';
+      else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
+        - newTag = 'option';
 
   //- Attributes context checks
   if attributes.href
