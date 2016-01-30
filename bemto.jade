@@ -24,14 +24,10 @@ mixin bemto_tag(tag)
       - newTag = 'option';
 
   //- Attributes context checks
-  if attributes.href
-    - newTag = 'a';
   if attributes.for
     - newTag = 'label';
   if attributes.type
     - newTag = 'input';
-  else if attributes.src
-    - newTag = 'img';
 
   //- Contextual wrappers
   if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
@@ -60,6 +56,7 @@ mixin bemto_tag(tag)
     when 'address': address&attributes(attributes): block
     when 'article': article&attributes(attributes): block
     when 'aside': aside&attributes(attributes): block
+    when 'audio': audio&attributes(attributes): block
     when 'b': b&attributes(attributes): block
     when 'blockquote': blockquote&attributes(attributes): block
     when 'body': body&attributes(attributes): block
@@ -125,6 +122,7 @@ mixin bemto_tag(tag)
     when 'var': var&attributes(attributes): block
     when 'hr': hr&attributes(attributes)
     when 'br': br&attributes(attributes)
+    when 'video': video&attributes(attributes)
     when 'wbr': br&attributes(attributes)
     when 'source': source&attributes(attributes)
     when 'img'
