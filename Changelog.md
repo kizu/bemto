@@ -1,6 +1,6 @@
 # Bemto changelog
 
-## v1.0.0 (in development)
+## v1.0.0 (2016-02-01)
 
 - Added a `bemto_scope` mixin for setting settings at a scope level.
 - Added a way to redefine prefix on block/element level.
