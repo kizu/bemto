@@ -27,14 +27,17 @@ mixin bemto_custom_inline_tag(customTag, self_closing)
     != '>'
 
 
-mixin bemto_custom_tag(customTag)
+mixin bemto_custom_tag(customTag, tagMetadata)
   - customTag = customTag || 'div'
+  - tagMetadata = tagMetadata || {}
   - var selfClosing = false
   if customTag.substr(-1) === '/'
     - selfClosing = true
     - customTag = customTag.slice(0, -1)
 
-  case get_bemto_tag_type(customTag)
+  - var tag_type = tagMetadata.type || get_bemto_tag_type(customTag)
+
+  case tag_type
     when 'inline'
       +bemto_custom_inline_tag(customTag)&attributes(attributes): block
     when 'self_closing'

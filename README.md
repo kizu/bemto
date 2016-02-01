@@ -249,6 +249,23 @@ Would render to
 
 For now that's all, but there would be other contexts in the future of bemto.
 
+### Redefining tag's metadata
+
+In a case you'd like some tag to set a different context, i.e. to override it's content_type, you can use a `metadata` option for the block/element. For example, if you'd like a link to have block context, you can redefine it in this way:
+
+``` jade
++b({ metadata: { content_type: 'block' } }).A.foo
+  +e.bar
+```
+
+would render as
+
+``` html
+<a class="foo">
+<div class="foo__bar">baz
+</div></a>
+```
+
 ## Settings
 
 There are some settings you can set for different syntaxes of BEM.

@@ -16,6 +16,7 @@ mixin b(options)
   //- Rewriting the class for elements and modifiers
   - var tag = options && options.tag || ( typeof options == 'string' ? options : '')
   - var isElement = options && options.isElement
+  - var tagMetadata = options && options.metadata
   if attributes.class
     //- Creating and normalizing bemto classes
     - var bemto_classes = attributes.class
@@ -126,10 +127,10 @@ mixin b(options)
       - attributes.class = undefined
 
   if block
-    +bemto_tag(tag)&attributes(attributes)
+    +bemto_tag(tag, tagMetadata)&attributes(attributes)
       block
   else
-    +bemto_tag(tag)&attributes(attributes)
+    +bemto_tag(tag, tagMetadata)&attributes(attributes)
 
   //- Closing actions (remove the current block from the chain)
   if !isElement

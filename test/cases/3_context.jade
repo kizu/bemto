@@ -5,7 +5,7 @@ include ../../bemto
     +e.link(href="foo")
       +e.text foo
   +b.list-item
-    +e.link(href="bar")
+    +e({ metadata: { content_type: 'block' } }).link(href="bar")
       +e.text bar
 
 p
