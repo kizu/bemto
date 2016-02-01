@@ -17,6 +17,7 @@ mixin b(options)
   - var tag = options && options.tag || ( typeof options == 'string' ? options : '')
   - var isElement = options && options.isElement
   - var tagMetadata = options && options.metadata
+  - var block_sets_context = false
   if attributes.class
     //- Creating and normalizing bemto classes
     - var bemto_classes = attributes.class
@@ -68,6 +69,7 @@ mixin b(options)
         - klass = name_with_context[1]
         - bemto_object['is_context'] = true
         - sets_context = true
+        - block_sets_context = true
 
 
       //- Apply the modifier from the classname if exist
@@ -98,6 +100,7 @@ mixin b(options)
     if !isElement && !new_context.length && bemto_objects[0] && bemto_objects[0].name && bemto_objects[0].name.match('^[a-zA-Z0-9]+.*')
       - bemto_objects[0]['is_context'] = true
       - new_context.push(bemto_objects[0].context ? (bemto_objects[0].context + settings['element'] + bemto_objects[0].name) : bemto_objects[0].name)
+      - block_sets_context = true
 
     if new_context.length
       //- Use only the block's name for context if we're at strict setting
@@ -133,7 +136,7 @@ mixin b(options)
     +bemto_tag(tag, tagMetadata)&attributes(attributes)
 
   //- Closing actions (remove the current block from the chain)
-  if !isElement
+  if !isElement && block_sets_context
     - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
   - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
 

@@ -15,6 +15,7 @@
 - Changed the way custom tag works, properly rendering unknown tags (including self-closing if defined in options).
 - Changed the way attribute-implied tags are handled.
 - Changed the order of the classes in output (was: alphabet, now: the same as in source).
+- Fixed a case when the context stack was incorrectly emptied.
 - Fixed the jade-bug-hardcoded doctype.
 - Fixed classless blocks.
 - Fixed modifiers on elements with certain separators defined.
