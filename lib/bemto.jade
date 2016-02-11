@@ -36,7 +36,7 @@ mixin b(options)
       - var sets_context = false
 
       //- Catching the optional tag class
-      if klass.match(/^[A-Z-]+$/)
+      if klass.match(/^[A-Z-]+[A-Z0-9-]?$/)
         - tag = klass.toLowerCase()
         - continue
 
