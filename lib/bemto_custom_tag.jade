@@ -11,7 +11,7 @@ mixin bemto_custom_inline_tag(customTag, self_closing)
   = customTag
   if attributes
     - for (var attribute in attributes)
-      if attributes.hasOwnProperty(attribute) && attributes[attribute] !== undefined
+      if attributes.hasOwnProperty(attribute) && attributes[attribute] !== false && attributes[attribute] !== undefined
         = ' '
         = attribute
         != '="'
