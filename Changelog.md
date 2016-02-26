@@ -1,5 +1,14 @@
 # Bemto changelog
 
+## v1.0.2 (2016-02-26)
+
+- Fixed incorrect behaviour of mixed blocks, #70.
+- Fixed the incorrect rendering of falsey attribute in inline tags, #71.
+
+## v1.0.1 (2016-02-12)
+
+- Fixed incorrect handling of class tags with numbers.
+
 ## v1.0.0 (2016-02-01)
 
 - Added a `bemto_scope` mixin for setting settings at a scope level.
