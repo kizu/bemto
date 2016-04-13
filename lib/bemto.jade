@@ -119,6 +119,10 @@ mixin b(options)
       each bemto_object in bemto_objects
         if bemto_object.name
           - var prefix = settings.prefix
+          - var global_classes_prefix_reg_exp = new RegExp('^(' + settings.global_classes_prefix + ')')
+          if settings.global_classes_prefix && bemto_object.name.match(global_classes_prefix_reg_exp)
+            - prefix = ''
+            - bemto_object.name = bemto_object.name.replace(global_classes_prefix_reg_exp, '')
           if bemto_object.context
             - prefix += bemto_object.context + settings.output_element
           - new_classes.push(prefix + bemto_object.name)
