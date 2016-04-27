@@ -1,6 +1,6 @@
 # Bemto changelog
 
-## v1.0.3 (in development)
+## v1.0.3 (2016-04-27)
 
 - Fixed improper boolean attributes for custom tags.
 
