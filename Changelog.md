@@ -1,5 +1,9 @@
 # Bemto changelog
 
+## v1.0.3 (in development)
+
+- Fixed improper boolean attributes for custom tags.
+
 ## v1.0.2 (2016-02-26)
 
 - Fixed incorrect behaviour of mixed blocks, #70.
