@@ -488,7 +488,7 @@ There you can see almost all of the bemto features that can be used for any mixi
 
 To be continued!
 
-Id you'd like to follow on the bemto progress, [follow me on twitter](https://twitter.com/kizmarh/).
+If you'd like to follow on the bemto progress, [follow me on twitter](https://twitter.com/kizmarh/).
 
 - - -
 
