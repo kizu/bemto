@@ -1,0 +1,16 @@
+include ../../bemto
+
+-
+  set_bemto_settings({
+    prefix: 'b-'
+  })
++b.block.not-global.--global
+  +e.element foo
+
+-
+  set_bemto_settings({
+    prefix: 'b-',
+    global_classes_prefix: '--'
+  })
++b.block.not-global.--global
+  +e.element foo
