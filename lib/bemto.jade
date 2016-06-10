@@ -130,6 +130,10 @@ mixin b(options)
     else
       - attributes.class = undefined
 
+    if attributes.klass
+      - attributes.class = attributes.class ? [attributes.class, attributes.klass].join(' ') : attributes.klass
+      - delete attributes.klass
+
   if block
     +bemto_tag(tag, tagMetadata)&attributes(attributes)
       block
