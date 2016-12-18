@@ -1,12 +1,12 @@
-# Bemto — mixins for writing [BEM][]-style code for [Jade][] [![Build Status][build]][build-link] [![NPM version][version]][version-link]
+# Bemto — mixins for writing [BEM][]-style code for [Pug][] [![Build Status][build]][build-link] [![NPM version][version]][version-link]
 
 [BEM]: http://bem.github.com/bem-method/pages/beginning/beginning.en.html
-[Jade]: https://github.com/visionmedia/jade
+[Pug]: https://pugjs.org/
 
 [build]: https://travis-ci.org/kizu/bemto.png?branch=master
 [build-link]: https://travis-ci.org/kizu/bemto
-[version]: https://badge.fury.io/js/bemto.jade.png
-[version-link]: http://badge.fury.io/js/bemto.jade
+[version]: https://badge.fury.io/js/bemto.pug.png
+[version-link]: http://badge.fury.io/js/bemto.pug
 
 ## Table of Contents
 
@@ -28,20 +28,22 @@
 
 ## Install & Use
 
+### Cloning
+
 1. Clone `bemto` somewhere to your project:
 
     ```sh
     git clone git://github.com/kizu/bemto.git
     ```
-2. Include it in your `.jade` project:
+2. Include it in your `.pug` project:
 
-    ```Jade
-    include bemto/bemto
+    ```Pug
+    include bemto/bemto.pug
     ```
 
 3. Use it:
 
-    ```Jade
+    ```Pug
     +b.block1
       +e.element1 Foo
       +b.block2
@@ -73,7 +75,7 @@
 
 You can create block calling the `b` mixin with some class attached to it:
 
-```Jade
+```Pug
 +b.foo bar
 ```
 
@@ -83,7 +85,7 @@ That would render as
 <div class="foo">bar</div>
 ```
 
-While the simple block's syntax, of course, is harder than the simple Jade's tags, the main point is to create the contexts for elements.
+While the simple block's syntax, of course, is harder than the simple Pug's tags, the main point is to create the contexts for elements.
 
 ### Elements
 
@@ -91,7 +93,7 @@ While the simple block's syntax, of course, is harder than the simple Jade's tag
 
 Bemto gives a convenient way to declare the elements: just use the `e` mixin inside any block context:
 
-```Jade
+```Pug
 +b.foo
   +e.bar baz
 ```
@@ -108,7 +110,7 @@ This would render like
 
 Note that bemto uses the first classname of the block as a context for further elements. If you'd like to use another class without changing the order, you can mark it with `__` in the end:
 
-```Jade
+```Pug
 +b.foo.bar__
   +e.baz
 ```
@@ -128,7 +130,7 @@ This way instead of `foo` bemto would base the nested elements from the `bar`:
 
 Bemto makes it easy to write such modifiers, 'cause you don't need now to write the same block's name twice:
 
-```Jade
+```Pug
 +b.block_foo bar
 ```
 
@@ -142,7 +144,7 @@ See? You write just `.block_foo` but by fact get the `.block.block_foo` instead!
 
 But what if you need to have more than one modifier on one block or element? Bemto have a way to do so: add a class to your block or element starting with a modifier token:
 
-```Jade
+```Pug
 +b.block_foo._bar._baz
   +e.element_type_lol._mode_moddy Blah
 ```
@@ -159,7 +161,7 @@ and that would render as
 
 You can also use shorter modifier syntax like `class="block -modifier"` (but only when this syntax won't be used for delimiting full modifiers or elements).
 
-```Jade
+```Pug
 +b.-foo.-bar.-baz
 ```
 
@@ -175,13 +177,13 @@ this would render to
 
 By default the blocks and elements render as `div`s. You can change it by passing the desired tag name as the first class in uppercase:
 
-```Jade
+```Pug
 +b.SPAN.foo bar
 ```
 
 Or by passing an `options` object with a `tag` param:
 
-```Jade
+```Pug
 +b({tag: 'span'})foo bar
 ```
 
@@ -193,9 +195,9 @@ Either way would render as
 
 ### Attributes
 
-Like any Jade tag or mixin, blocks and elements can take attributes that would go to the desired tags:
+Like any Pug tag or mixin, blocks and elements can take attributes that would go to the desired tags:
 
-```Jade
+```Pug
 +b.foo(title="Oh, it's a title")
   +e.A.bar(href='#baz') baz
 ```
@@ -220,7 +222,7 @@ Look at the previous example: you have there some excess code that you can throw
 
 So, here is a bigger example:
 
-```Jade
+```Pug
 +b.UL.list
   +b.list-item
     +e.link(href="foo")
@@ -253,7 +255,7 @@ For now that's all, but there would be other contexts in the future of bemto.
 
 In a case you'd like some tag to set a different context, i.e. to override it's content_type, you can use a `metadata` option for the block/element. For example, if you'd like a link to have block context, you can redefine it in this way:
 
-``` jade
+```Pug
 +b({ metadata: { content_type: 'block' } }).A.foo
   +e.bar
 ```
@@ -272,7 +274,7 @@ There are some settings you can set for different syntaxes of BEM.
 
 For doing so, you must set them after including the `bemto` like this:
 
-```Jade
+```Pug
 -
   set_bemto_settings({
     prefix: '',
@@ -287,7 +289,7 @@ Here you can see all available settings with their default values.
 
 If you'd like to prefix all your bemto-generated blocks, you can set the `prefix` setting to something, so it would be added to the beginning of all your blocks. Like this:
 
-```Jade
+```Pug
 - set_bemto_settings({ prefix: 'b-' })
 
 +b.block
@@ -309,7 +311,7 @@ and that would then render as
 
 If you don't like the default elements syntax with the `__` delimiter, you can set using the `element` setting:
 
-```Jade
+```Pug
 - set_bemto_settings({ element: '-' })
 
 +b.block
@@ -331,7 +333,7 @@ this would render to
 
 If you'd like to use different modifier syntax, like the one Nicolas Gallagher mentioned in [his article](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/), you can use the `modifier` setting:
 
-```Jade
+```Pug
 - set_bemto_settings({ modifier: '--' })
 
 +b.block--modifier-name.--other-modifier foo
@@ -349,7 +351,7 @@ and that would expand to
 
 There can be cases when you could want to make elements of elements, i.e. when using element names instead of block names:
 
-```Jade
+```Pug
 +b.block-element
   +e.element2
 ```
@@ -366,7 +368,7 @@ renders by default to
 
 If you'd like to have `foo__bar__baz` in the output instead, you can set the `flat_elements` to `false`:
 
-```Jade
+```Pug
 - set_bemto_settings({ flat_elements: false })
 
 +b.foo__bar
@@ -386,7 +388,7 @@ This would render with the nested element:
 
 If you'll need to have some settings just in a certain scope, you can wrap your code in `bemto_scope` mixin, passing your desired settings right into it:
 
-```Jade
+```Pug
 +b.foo_bar
   +bemto_scope({
       prefix: 'b-',
@@ -413,9 +415,9 @@ Would render as
 
 ### Setting for the output syntax of the elements/modifiers
 
-If you'd like to use different syntax of the element/modifier delimiter in jade source and the html output, you can use the `ouput_element` and `output_modifier` settings, otherwise the same delimiter as in the `element` and `modifier` settings would be used.
+If you'd like to use different syntax of the element/modifier delimiter in Pug source and the html output, you can use the `ouput_element` and `output_modifier` settings, otherwise the same delimiter as in the `element` and `modifier` settings would be used.
 
-```Jade
+```Pug
 -
   set_bemto_settings({
     element: '-',
@@ -441,9 +443,9 @@ You can see how the source uses the `-` for element and `--` for modifier, but t
 
 ## Using for building complex mixins
 
-This is somewhat obvious, but I must mention that the bemto blocks would be great for using as the bricks for building more complex blocks. The Jade mixins work in the way where you can translate any attributes through to the any inner blocks. So you can do this:
+This is somewhat obvious, but I must mention that the bemto blocks would be great for using as the bricks for building more complex blocks. The Pug mixins work in the way where you can translate any attributes through to the any inner blocks. So you can do this:
 
-```Jade
+```Pug
 mixin link(url)
   +b.SPAN.link(href=url)&attributes(attributes)
     block
@@ -451,7 +453,7 @@ mixin link(url)
 
 And then use it in this way:
 
-```Jade
+```Pug
 +link('#Foo') Foo
 
 +link('https://github.com')._external Github

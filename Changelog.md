@@ -1,5 +1,9 @@
 # Bemto changelog
 
+## v2.0.0 (2016-12-18)
+
+- Now supporting Pug, released as `bemto.pug` in npm.
+
 ## v1.0.3 (2016-04-27)
 
 - Fixed improper boolean attributes for custom tags.
