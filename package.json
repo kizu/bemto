@@ -1,24 +1,26 @@
 {
-  "name": "bemto.jade",
-  "version": "1.0.3",
-  "main": "./lib/index.jade",
+  "name": "bemto.pug",
+  "version": "2.0.0",
+  "main": "./lib/index.pug",
   "author": "Roman Komarov <kizu@kizu.ru>",
   "licence": "MIT",
-  "description": "Smart mixins for writing BEM in Jade",
+  "description": "Smart mixins for writing BEM in Pug",
   "keywords": [
     "jade",
+    "pug",
     "bem"
   ],
   "homepage": "https://github.com/kizu/bemto#readme",
   "bugs": {
     "url": "https://github.com/kizu/bemto/issues"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/kizu/bemto.git"
   },
   "devDependencies": {
-    "jade": "1.11.x",
+    "pug": "2.0.0-beta6",
     "mocha": "*",
     "should": "2.0.x"
   },
