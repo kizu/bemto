@@ -18,11 +18,16 @@
     - [Changing the tag name](#changing-the-tag-name)
     - [Attributes](#attributes)
     - [Context](#context)
+    - [Redefining tag's metadata](#redefining-tags-metadata)
 
 3. [Settings](#settings)
     - [Adding Prefix](#adding-prefix)
     - [Setting for Element syntax](#setting-for-element-syntax)
     - [Setting for Modifier syntax](#setting-for-modifier-syntax)
+    - [Setting for allowing nested elements](#setting-for-allowing-nested-elements)
+    - [Scope for the settings](#scope-for-the-settings)
+    - [Setting for the output syntax of the elements/modifiers](#setting-for-allowing-nested-elements)
+
 
 4. [Using for building complex mixins](#using-for-building-complex-mixins)
 
