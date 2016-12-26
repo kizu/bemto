@@ -2,6 +2,7 @@
 
 ## v2.1.0 (2016-12-26)
 
+- Added support for prefix objects.
 - Fixed escaping for inline tags' attribute values, #84.
 
 ## v2.0.0 (2016-12-18)

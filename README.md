@@ -287,7 +287,11 @@ Here you can see all available settings with their default values.
 
 ### Adding Prefix
 
-If you'd like to prefix all your bemto-generated blocks, you can set the `prefix` setting to something, so it would be added to the beginning of all your blocks. Like this:
+If you'd like to prefix all your bemto-generated blocks, you can set the `prefix` setting to a String or an Object.
+
+#### Strings for prefix setting
+
+If you'd set a string, it would be just prepended to the names of all blocks:
 
 ```Pug
 - set_bemto_settings({ prefix: 'b-' })
@@ -306,6 +310,36 @@ and that would then render as
   </div>
 </div>
 ```
+
+Note that if you had already used this prefix in a classname, it won't be added, so you won't have occasional duplicated prefixes.
+
+#### Objects for prefix setting
+
+If you'd want to have more control over prefixes, you can use a special object instead of a string:
+
+``` Pug
+-
+  set_bemto_settings({
+    prefix: {
+      '': 'b-',
+      'js-': true,
+      'is-': 'is-',
+      'global-': '',
+      'nope-': false,
+      'sc-': 'shortcut-'
+    }
+  })
+```
+
+Look at the above example, it have all the variations the prefix object accepts:
+
+- The empty string for key works the same as a string setting: you'd get the value for this key prepended for all classnames without detected prefixes.
+
+- If a value for any key is `true`, this prefix would be always treated as such and won't be prepended by other prefixes.
+
+- If a value for a key is `false` or an empty string, the classnames with this prefix would be rendered without it.
+
+- In other cases, where the key and the value are both strings, all the key prefixes in the source code would be replaced with the value ones, and also all of those prefixes would be treated as registered ones, so you wouldn't add other prefixes for them.
 
 ### Setting for Element syntax
 

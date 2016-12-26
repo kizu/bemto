@@ -82,9 +82,35 @@ mixin b(options)
           - bemto_object['modifiers'] = []
         - bemto_object.modifiers.push(name_with_modifier[2])
 
+      - var found_prefix = ''
+      - var prefix_regex_string = '()?'
+      if settings.prefix
+        - var prefix = settings.prefix
+        if typeof prefix === 'string'
+          - prefix = { '': prefix }
 
-      if sets_context && klass.match('^[a-zA-Z0-9]+.*')
-        - new_context.push(bemto_object.context ? (bemto_object.context + settings['element'] + klass) : klass)
+        - var prefix_regex_test = []
+        if prefix instanceof Object
+          each value, key in prefix
+            if typeof key === 'string' && key != '' && prefix_regex_test.indexOf(key) == -1
+              - prefix_regex_test.push(key)
+            if typeof value === 'string' && value != '' && prefix_regex_test.indexOf(value) == -1
+              - prefix_regex_test.push(value)
+
+          - prefix_regex_string = '(' + prefix_regex_test.join('|') + ')?'
+
+        - var name_with_prefix = klass.match(new RegExp('^' + prefix_regex_string + '([A-Za-z0-9]+.*)$'))
+        if name_with_prefix
+          - klass = name_with_prefix[2]
+          - found_prefix = name_with_prefix[1] || ''
+          - found_prefix = prefix[found_prefix]
+          if found_prefix === undefined || found_prefix === true
+            - found_prefix = name_with_prefix[1]
+      - bemto_object['prefix'] = (found_prefix || '').replace(/\-/g, '%DASH%').replace(/\_/g, '%UNDERSCORE%')
+
+
+      if sets_context && klass.match(/^[a-zA-Z0-9]+.*/)
+        - new_context.push(bemto_object.context ? (bemto_object.context + settings['element'] + klass) : (bemto_object.prefix + klass))
 
       - bemto_object['name'] = klass
       - is_first_object = false
@@ -98,9 +124,9 @@ mixin b(options)
         - bemto_objects.push(bemto_object)
 
     //- If no custom context is set, use the first proper object
-    if !isElement && !new_context.length && bemto_objects[0] && bemto_objects[0].name && bemto_objects[0].name.match('^[a-zA-Z0-9]+.*')
+    if !isElement && !new_context.length && bemto_objects[0] && bemto_objects[0].name && bemto_objects[0].name.match(/^[a-zA-Z0-9]+.*/)
       - bemto_objects[0]['is_context'] = true
-      - new_context.push(bemto_objects[0].context ? (bemto_objects[0].context + settings['element'] + bemto_objects[0].name) : bemto_objects[0].name)
+      - new_context.push(bemto_objects[0].context ? (bemto_objects[0].context + settings['element'] + bemto_objects[0].name) : (bemto_objects[0].prefix + bemto_objects[0].name))
       - block_sets_context = true
 
     if new_context.length
@@ -110,7 +136,6 @@ mixin b(options)
           - var context_with_element = subcontext.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '.+$'))
           if context_with_element
             - new_context[i] = context_with_element[1]
-
       - bemto_chain[bemto_chain.length] = new_context
 
     //- Rendering the classes
@@ -118,15 +143,15 @@ mixin b(options)
       - var new_classes = []
       each bemto_object in bemto_objects
         if bemto_object.name
-          - var prefix = settings.prefix
+          - var start = bemto_object.prefix
           if bemto_object.context
-            - prefix += bemto_object.context + settings.output_element
-          - new_classes.push(prefix + bemto_object.name)
+            - start = bemto_object.context + settings.output_element
+          - new_classes.push(start + bemto_object.name)
           if bemto_object.modifiers
             each modifier in bemto_object.modifiers
-              - new_classes.push(prefix + bemto_object.name + settings.output_modifier + modifier)
+              - new_classes.push(start + bemto_object.name + settings.output_modifier + modifier)
 
-      - attributes.class = new_classes.join(' ')
+      - attributes.class = new_classes.join(' ').replace(/%DASH%/g, '-').replace(/%UNDERSCORE%/g, '_')
     else
       - attributes.class = undefined
 

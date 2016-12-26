@@ -40,3 +40,26 @@ p
 
 +b.block.block2-
   +e.element--modifier foo
+
+-
+  set_bemto_settings({
+    prefix: {
+      '': 'b-',
+      'js-': true,
+      'is-': 'is-',
+      'global-': '',
+      'nope-': false,
+      'sc-': 'shortcut-'
+    }
+  })
+
++b.block Should have 'b-'
++b.b-block Should have 'b-'
++b.js-block Should have 'js-'
++b.is-block Should have 'is-'
++b.sc-block Should have 'shortcut-'
++b.global-block Should have no prefix
++b.nope-block Should have no prefix
+
++b.Bblock-.js-JSblock-.nope-NOPEblock-.Bblock2-
+  +e.elem Should have all the prefixes for parent bemto objects
