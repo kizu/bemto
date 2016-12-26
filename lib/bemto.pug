@@ -151,7 +151,9 @@ mixin b(options)
             each modifier in bemto_object.modifiers
               - new_classes.push(start + bemto_object.name + settings.output_modifier + modifier)
 
-      - attributes.class = new_classes.join(' ').replace(/%DASH%/g, '-').replace(/%UNDERSCORE%/g, '_')
+      - var delimiter = settings.class_delimiter
+      - delimiter = delimiter ? (' ' + delimiter + ' ') : ' '
+      - attributes.class = new_classes.join(delimiter).replace(/%DASH%/g, '-').replace(/%UNDERSCORE%/g, '_')
     else
       - attributes.class = undefined
 

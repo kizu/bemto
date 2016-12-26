@@ -475,6 +475,25 @@ would output
 
 You can see how the source uses the `-` for element and `--` for modifier, but the result gets `__` and `_` instead.
 
+### Setting for delimiters between classnames
+
+If you'd like to have extra delimieters between the rendered classnames for clarity, you can use a `class_delimiter` setting:
+
+``` Pug
+- set_bemto_settings({ class_delimiter: '|' })
+
++b.foo.bar_baz
+```
+
+Would be rendered as
+
+``` HTML
+<div class="foo | bar | bar_baz">
+</div>
+```
+
+Note that there would be always added spaces around the given delimiter, so you don't need to include them in the setting's value.
+
 ## Using for building complex mixins
 
 This is somewhat obvious, but I must mention that the bemto blocks would be great for using as the bricks for building more complex blocks. The Pug mixins work in the way where you can translate any attributes through to the any inner blocks. So you can do this:
