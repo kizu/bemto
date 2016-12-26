@@ -47,7 +47,7 @@ mixin b(options)
 
 
       //- If the class is a modifier, add it to the previous object
-      - var modifier_class = klass.match(new RegExp('^(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + '(.+)$'))
+      - var modifier_class = klass.match(new RegExp('^(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + "(.+)$"))
       //- FIXME: `+b._mod._mod` — raw classes should be treated as raw ones
       if modifier_class && prev_object && prev_object.name
         if !prev_object['modifiers']
@@ -57,14 +57,14 @@ mixin b(options)
 
 
       //- Use block as a context for the following classes if we have element delimiter at the start
-      - var element_class = klass.match(new RegExp('^(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '(.+)$'))
+      - var element_class = klass.match(new RegExp('^(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + "(.+)$"))
       if element_class
         - bemto_object['context'] = bemto_chain[bemto_chain.length - 1]
         - klass = element_class[1]
 
 
       //- Set custom context for nested items
-      - var name_with_context = klass.match(new RegExp('^(.*[A-Za-z0-9])(?!' + settings['modifier'] + '$)' + settings['element'] + '$'))
+      - var name_with_context = klass.match(new RegExp('^(.*[A-Za-z0-9])(?!' + settings['modifier'] + "$)" + settings['element'] + "$"))
       if name_with_context
         - klass = name_with_context[1]
         - bemto_object['is_context'] = true
@@ -74,7 +74,7 @@ mixin b(options)
 
 
       //- Apply the modifier from the classname if exist
-      - var name_with_modifier = klass.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + '(.+)$'))
+      - var name_with_modifier = klass.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + "(.+)$"))
       if name_with_modifier
         - klass = name_with_modifier[1]
 
@@ -99,7 +99,7 @@ mixin b(options)
 
           - prefix_regex_string = '(' + prefix_regex_test.join('|') + ')?'
 
-        - var name_with_prefix = klass.match(new RegExp('^' + prefix_regex_string + '([A-Za-z0-9]+.*)$'))
+        - var name_with_prefix = klass.match(new RegExp('^' + prefix_regex_string + "([A-Za-z0-9]+.*)$"))
         if name_with_prefix
           - klass = name_with_prefix[2]
           - found_prefix = name_with_prefix[1] || ''
@@ -133,7 +133,7 @@ mixin b(options)
       //- Use only the block's name for context if we're at strict setting
       if settings.flat_elements
         each subcontext, i in new_context
-          - var context_with_element = subcontext.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + '.+$'))
+          - var context_with_element = subcontext.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + ".+$"))
           if context_with_element
             - new_context[i] = context_with_element[1]
       - bemto_chain[bemto_chain.length] = new_context
