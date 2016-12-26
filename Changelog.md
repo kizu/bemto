@@ -1,5 +1,9 @@
 # Bemto changelog
 
+## v2.1.0 (2016-12-26)
+
+- Fixed escaping for inline tags' attribute values, #84.
+
 ## v2.0.0 (2016-12-18)
 
 - Now supporting Pug, released as `bemto.pug` in npm.
