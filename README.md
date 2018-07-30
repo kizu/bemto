@@ -46,7 +46,25 @@
     include bemto/bemto.pug
     ```
 
-3. Use it:
+### Or install via npm / yarn
+
+1. Install `bemto` to your project:
+
+  ```sh
+  # via npm
+  npm i bemto -D
+
+  # via yarn
+  yarn add bemto -D
+  ```
+
+2. Include it in your `.pug` project:
+
+  ```Pug
+  include (path to node_modules, for example: ../../)node_modules/bemto.pug/bemto_webpack
+  ```
+
+### Use it:
 
     ```Pug
     +b.block1

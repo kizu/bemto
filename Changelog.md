@@ -1,5 +1,10 @@
 # Bemto changelog
 
+## v2.2.0 (2018-07-30)
+
+- Added support webpack, #96.
+- Update dependencies.
+
 ## v2.1.0 (2016-12-26)
 
 - Added support for prefix objects.

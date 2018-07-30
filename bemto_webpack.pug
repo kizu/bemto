@@ -1,0 +1,554 @@
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+//- Some global variables
+- var bemto_chain = []
+- var bemto_chain_contexts = ['block']
+
+//- Block
+mixin b(options)
+  - var settings = get_bemto_settings()
+  //- TODO: should we make it generic way for other settings too?
+  if options && options.prefix !== undefined
+    - settings.prefix = options.prefix
+
+  //- Rewriting the class for elements and modifiers
+  - var tag = options && options.tag || ( typeof options == 'string' ? options : '')
+  - var isElement = options && options.isElement
+  - var tagMetadata = options && options.metadata
+  - var block_sets_context = false
+  if attributes.class
+    //- Creating and normalizing bemto classes
+    - var bemto_classes = attributes.class
+    if bemto_classes instanceof Array
+      - bemto_classes = bemto_classes.join(' ')
+    - bemto_classes = bemto_classes.split(' ')
+
+
+    - var bemto_objects = []
+    - var is_first_object = true
+    - var new_context = []
+
+    each klass, i in bemto_classes
+      - var bemto_object = {}
+      - var prev_object = bemto_objects[bemto_objects.length - 1]
+      - var sets_context = false
+
+      //- Catching the optional tag class
+      if klass.match(/^[A-Z-]+[A-Z0-9-]?$/)
+        - tag = klass.toLowerCase()
+        - continue
+
+
+      //- Use block as a context for the first class if we're at element
+      if is_first_object && isElement
+        - bemto_object['context'] = bemto_chain[bemto_chain.length - 1]
+
+
+      //- If the class is a modifier, add it to the previous object
+      - var modifier_class = klass.match(new RegExp('^(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + "(.+)$"))
+      //- FIXME: `+b._mod._mod` — raw classes should be treated as raw ones
+      if modifier_class && prev_object && prev_object.name
+        if !prev_object['modifiers']
+          - prev_object['modifiers'] = []
+        - prev_object.modifiers.push(modifier_class[1])
+        - continue
+
+
+      //- Use block as a context for the following classes if we have element delimiter at the start
+      - var element_class = klass.match(new RegExp('^(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + "(.+)$"))
+      if element_class
+        - bemto_object['context'] = bemto_chain[bemto_chain.length - 1]
+        - klass = element_class[1]
+
+
+      //- Set custom context for nested items
+      - var name_with_context = klass.match(new RegExp('^(.*[A-Za-z0-9])(?!' + settings['modifier'] + "$)" + settings['element'] + "$"))
+      if name_with_context
+        - klass = name_with_context[1]
+        - bemto_object['is_context'] = true
+        - sets_context = true
+        - block_sets_context = true
+        - isElement = false
+
+
+      //- Apply the modifier from the classname if exist
+      - var name_with_modifier = klass.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['element'] + '[A-Za-z0-9])' + settings['modifier'] + "(.+)$"))
+      if name_with_modifier
+        - klass = name_with_modifier[1]
+
+        if !bemto_object['modifiers']
+          - bemto_object['modifiers'] = []
+        - bemto_object.modifiers.push(name_with_modifier[2])
+
+      - var found_prefix = ''
+      - var prefix_regex_string = '()?'
+      if settings.prefix
+        - var prefix = settings.prefix
+        if typeof prefix === 'string'
+          - prefix = { '': prefix }
+
+        - var prefix_regex_test = []
+        if prefix instanceof Object
+          each value, key in prefix
+            if typeof key === 'string' && key != '' && prefix_regex_test.indexOf(key) == -1
+              - prefix_regex_test.push(key)
+            if typeof value === 'string' && value != '' && prefix_regex_test.indexOf(value) == -1
+              - prefix_regex_test.push(value)
+
+          - prefix_regex_string = '(' + prefix_regex_test.join('|') + ')?'
+
+        - var name_with_prefix = klass.match(new RegExp('^' + prefix_regex_string + "([A-Za-z0-9]+.*)$"))
+        if name_with_prefix
+          - klass = name_with_prefix[2]
+          - found_prefix = name_with_prefix[1] || ''
+          - found_prefix = prefix[found_prefix]
+          if found_prefix === undefined || found_prefix === true
+            - found_prefix = name_with_prefix[1]
+      - bemto_object['prefix'] = (found_prefix || '').replace(/\-/g, '%DASH%').replace(/\_/g, '%UNDERSCORE%')
+
+
+      if sets_context && klass.match(/^[a-zA-Z0-9]+.*/)
+        - new_context.push(bemto_object.context ? (bemto_object.context + settings['element'] + klass) : (bemto_object.prefix + klass))
+
+      - bemto_object['name'] = klass
+      - is_first_object = false
+
+      if bemto_object.context && bemto_object.context.length > 1
+        each subcontext, i in bemto_object.context
+          - var sub_object = clone(bemto_object)
+          - sub_object['context'] = [subcontext]
+          - bemto_objects.push(sub_object)
+      else
+        - bemto_objects.push(bemto_object)
+
+    //- If no custom context is set, use the first proper object
+    if !isElement && !new_context.length && bemto_objects[0] && bemto_objects[0].name && bemto_objects[0].name.match(/^[a-zA-Z0-9]+.*/)
+      - bemto_objects[0]['is_context'] = true
+      - new_context.push(bemto_objects[0].context ? (bemto_objects[0].context + settings['element'] + bemto_objects[0].name) : (bemto_objects[0].prefix + bemto_objects[0].name))
+      - block_sets_context = true
+
+    if new_context.length
+      //- Use only the block's name for context if we're at strict setting
+      if settings.flat_elements
+        each subcontext, i in new_context
+          - var context_with_element = subcontext.match(new RegExp('^(.*?[A-Za-z0-9])(?!' + settings['modifier'] + '[A-Za-z0-9])' + settings['element'] + ".+$"))
+          if context_with_element
+            - new_context[i] = context_with_element[1]
+      - bemto_chain[bemto_chain.length] = new_context
+
+    //- Rendering the classes
+    if bemto_objects.length
+      - var new_classes = []
+      each bemto_object in bemto_objects
+        if bemto_object.name
+          - var start = bemto_object.prefix
+          if bemto_object.context
+            - start = bemto_object.context + settings.output_element
+          - new_classes.push(start + bemto_object.name)
+          if bemto_object.modifiers
+            each modifier in bemto_object.modifiers
+              - new_classes.push(start + bemto_object.name + settings.output_modifier + modifier)
+
+      - var delimiter = settings.class_delimiter
+      - delimiter = delimiter ? (' ' + delimiter + ' ') : ' '
+      - attributes.class = new_classes.join(delimiter).replace(/%DASH%/g, '-').replace(/%UNDERSCORE%/g, '_')
+    else
+      - attributes.class = undefined
+
+  if block
+    +bemto_tag(tag, tagMetadata)&attributes(attributes)
+      block
+  else
+    +bemto_tag(tag, tagMetadata)&attributes(attributes)
+
+  //- Closing actions (remove the current block from the chain)
+  if !isElement && block_sets_context
+    - bemto_chain = bemto_chain.splice(0,bemto_chain.length-1)
+  - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
+
+//- Element
+mixin e(options)
+  if options && typeof options == 'string'
+    - options = { 'tag': options }
+  else
+    - options = options || {}
+  - options['isElement'] = true
+  +b(options)&attributes(attributes): block
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+//- This is a replacement for an interpolated tag,
+//- which is not possible due to Jade's wontfixed #659 and #660 bugs.
+
+mixin bemto_custom_inline_tag(customTag, self_closing)
+  - self_closing = self_closing || false
+  != '<'
+  = customTag
+  if attributes
+    - for (var attribute in attributes)
+      if attributes.hasOwnProperty(attribute) && attributes[attribute] !== false && attributes[attribute] !== undefined
+        = ' '
+        = attribute
+        != '="'
+        != attributes[attribute] === true ? attribute : attributes[attribute]
+        != '"'
+  if self_closing
+    != '/>'
+  else
+    != '>'
+    block
+    != '</'
+    = customTag
+    != '>'
+
+
+mixin bemto_custom_tag(customTag, tagMetadata)
+  - customTag = customTag || 'div'
+  - tagMetadata = tagMetadata || {}
+  - var selfClosing = false
+  if customTag.substr(-1) === '/'
+    - selfClosing = true
+    - customTag = customTag.slice(0, -1)
+
+  - var tag_type = tagMetadata.type || get_bemto_tag_type(customTag)
+
+  case tag_type
+    when 'inline'
+      +bemto_custom_inline_tag(customTag)&attributes(attributes): block
+    when 'self_closing'
+      +bemto_custom_inline_tag(customTag, true)&attributes(attributes)
+
+    //- Block-level tags
+    default
+      if selfClosing
+        #{customTag}&attributes(attributes)()/
+      else
+        #{customTag}&attributes(attributes): block
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+
+//- Tag mixin, used for tweaking what tag we are throwing and do we need to wrap anything here
+
+mixin bemto_tag(tag, tagMetadata)
+  - var settings = get_bemto_settings()
+  - tagMetadata = tagMetadata || {}
+
+  //- rewriting tag name on different contexts
+  - var newTag = tag || settings['default_tag']
+  - var contextIndex = bemto_chain_contexts.length
+
+  //- Checks for contexts if no tag given
+  if !tag
+    if bemto_chain_contexts[contextIndex-1] === 'inline'
+      - newTag = 'span'
+    else if bemto_chain_contexts[contextIndex-1] === 'list'
+      - newTag = 'li'
+    else if bemto_chain_contexts[contextIndex-1] === 'optionlist'
+      - newTag = 'option'
+
+  //- Attributes context checks
+  //- Only when no actual tag is given
+  if !tag || tag == 'span' || tag == 'div'
+    if attributes.href
+      - newTag = 'a'
+    if attributes.for
+      - newTag = 'label'
+    if attributes.type
+      //- TODO: Add more checks for different type value patterns
+      - newTag = block ? 'button' : 'input'
+    else if attributes.src
+      - newTag = 'img'
+
+  //- Contextual wrappers
+  if bemto_chain_contexts[contextIndex-1] === 'list' && newTag !== 'li'
+    | <li>
+  else if bemto_chain_contexts[contextIndex-1] !== 'list' && bemto_chain_contexts[contextIndex-1] !== 'pseudo-list' && newTag === 'li'
+    | <ul>
+    - bemto_chain_contexts[bemto_chain_contexts.length] = 'pseudo-list'
+  else if bemto_chain_contexts[contextIndex-1] === 'pseudo-list' && newTag !== 'li'
+    | </ul>
+    - bemto_chain_contexts = bemto_chain_contexts.splice(0,bemto_chain_contexts.length-1)
+
+  //- Setting context
+  - var content_type = tagMetadata.content_type || get_bemto_tag_content_type(newTag)
+  - bemto_chain_contexts[bemto_chain_contexts.length] = content_type
+
+  if newTag == 'img'
+    //- If there is no title we don't need it to show even if there is some alt
+    if attributes.alt && !attributes.title
+      - attributes.title = ''
+    //- If we have title, we must have it in alt if it's not set
+    if attributes.title && !attributes.alt
+      - attributes.alt = attributes.title
+    if !attributes.alt
+      - attributes.alt = ''
+    if attributes.alt === ''
+      - attributes.role = 'presentation'
+    if !attributes.src
+      if settings.nosrc_substitute === true
+        - attributes.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+      else if settings.nosrc_substitute
+        - attributes.src = settings.nosrc_substitute
+
+  if newTag == 'input'
+    if !attributes.type
+      - attributes.type = "text"
+
+  if newTag == 'main'
+    if !attributes.role
+      - attributes.role = 'main'
+  if newTag == 'html'
+    <!DOCTYPE html>
+
+  +bemto_custom_tag(newTag, tagMetadata)&attributes(attributes)
+    if block
+      block
+
+  //- Closing all the wrapper tails
+  if bemto_chain_contexts[contextIndex-1] === 'list' && newTag != 'li'
+    | </li>
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+-
+  // Cloning via http://stackoverflow.com/a/728694/885556
+  function clone(obj) {
+      var copy;
+
+      // Handle the 3 simple types, and null or undefined
+      if (null == obj || "object" != typeof obj) return obj;
+
+      // Handle Date
+      if (obj instanceof Date) {
+          copy = new Date();
+          copy.setTime(obj.getTime());
+          return copy;
+      }
+
+      // Handle Array
+      if (obj instanceof Array) {
+          copy = [];
+          for (var i = 0, len = obj.length; i < len; i++) {
+              copy[i] = clone(obj[i]);
+          }
+          return copy;
+      }
+
+      // Handle Object
+      if (obj instanceof Object) {
+          copy = {};
+          for (var attr in obj) {
+              if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+          }
+          return copy;
+      }
+
+      throw new Error("Unable to copy obj! Its type isn't supported.");
+  }
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+
+-
+  var default_bemto_settings = {
+    'prefix': '',
+    'element': '__',
+    'modifier': '_',
+    'default_tag': 'div',
+    'nosrc_substitute': true,
+    'flat_elements': true,
+    'class_delimiter': ''
+  }
+
+  var bemto_output_settings = ['element', 'modifier'];
+
+  var bemto_settings = default_bemto_settings;
+
+  var get_bemto_settings = function() {
+    var settings = clone(bemto_settings);
+    if (bemto_settings_prefix      !== undefined) { settings['prefix']      = bemto_settings_prefix;      }
+    if (bemto_settings_element     !== undefined) { settings['element']     = bemto_settings_element;     }
+    if (bemto_settings_modifier    !== undefined) { settings['modifier']    = bemto_settings_modifier;    }
+    if (bemto_settings_default_tag !== undefined) { settings['default_tag'] = bemto_settings_default_tag; }
+
+    for (var i = 0; i < bemto_output_settings.length; i++) {
+      var setting = bemto_output_settings[i];
+      if (settings['output_' + setting] === undefined) {
+        settings['output_' + setting] = settings[setting];
+      }
+    };
+
+    return settings;
+  }
+
+  var set_bemto_setting = function(name, value) {
+    bemto_settings[name] = value;
+
+    //- Resetting the old variable-type setting
+    if (name == 'prefix' && bemto_settings_prefix !== undefined) { bemto_settings_prefix = undefined; }
+    if (name == 'element' && bemto_settings_element !== undefined) { bemto_settings_element = undefined; }
+    if (name == 'modifier' && bemto_settings_modifier !== undefined) { bemto_settings_modifier = undefined; }
+    if (name == 'default_tag' && bemto_settings_default_tag !== undefined) { bemto_settings_default_tag = undefined; }
+  }
+
+  var set_bemto_settings = function(settings) {
+    for (var name in settings) {
+      if (settings.hasOwnProperty(name)) {
+        set_bemto_setting(name, settings[name]);
+      }
+    }
+  }
+
+mixin bemto_scope(settings)
+  - var old_bemto_settings = clone(bemto_settings)
+  - set_bemto_settings(settings)
+  block
+  - set_bemto_settings(old_bemto_settings)
+//- bemto
+//- Copyright(c) 2012 Roman Komarov <kizu@kizu.ru>
+//- MIT Licensed
+
+-
+  var get_bemto_tag_type = function(tagName) {
+    var result = 'block'
+    if (bemto_tag_metadata[tagName]) {
+      result = bemto_tag_metadata[tagName].type || result;
+    }
+    return result;
+  }
+
+  var get_bemto_tag_content_type = function(tagName) {
+    var result = 'block'
+    if (bemto_tag_metadata[tagName]) {
+      result = bemto_tag_metadata[tagName].content_type || bemto_tag_metadata[tagName].type || result;
+    }
+    return result;
+  }
+
+  var bemto_tag_metadata = {
+    'hr': {
+      'type': 'self_closing'
+    },
+    'br': {
+      'type': 'self_closing'
+    },
+    'wbr': {
+      'type': 'self_closing'
+    },
+    'source': {
+      'type': 'self_closing'
+    },
+    'img': {
+      'type': 'self_closing'
+    },
+    'input': {
+      'type': 'self_closing'
+    },
+    'a': {
+      'type': 'inline'
+    },
+    'abbr': {
+      'type': 'inline'
+    },
+    'acronym': {
+      'type': 'inline'
+    },
+    'b': {
+      'type': 'inline'
+    },
+    'code': {
+      'type': 'inline'
+    },
+    'em': {
+      'type': 'inline'
+    },
+    'font': {
+      'type': 'inline'
+    },
+    'i': {
+      'type': 'inline'
+    },
+    'ins': {
+      'type': 'inline'
+    },
+    'kbd': {
+      'type': 'inline'
+    },
+    'map': {
+      'type': 'inline'
+    },
+    'pre': {
+      'type': 'inline'
+    },
+    'samp': {
+      'type': 'inline'
+    },
+    'small': {
+      'type': 'inline'
+    },
+    'span': {
+      'type': 'inline'
+    },
+    'strong': {
+      'type': 'inline'
+    },
+    'sub': {
+      'type': 'inline'
+    },
+    'sup': {
+      'type': 'inline'
+    },
+    'textarea': {
+      'type': 'inline'
+    },
+    'time': {
+      'type': 'inline'
+    },
+    'label': {
+      'content_type': 'inline'
+    },
+    'p': {
+      'content_type': 'inline'
+    },
+    'h1': {
+      'content_type': 'inline'
+    },
+    'h2': {
+      'content_type': 'inline'
+    },
+    'h3': {
+      'content_type': 'inline'
+    },
+    'h4': {
+      'content_type': 'inline'
+    },
+    'h5': {
+      'content_type': 'inline'
+    },
+    'h6': {
+      'content_type': 'inline'
+    },
+    'ul': {
+      'content_type': 'list'
+    },
+    'ol': {
+      'content_type': 'list'
+    },
+    'select': {
+      'content_type': 'optionlist'
+    },
+    'datalist': {
+      'content_type': 'optionlist'
+    }
+  }
