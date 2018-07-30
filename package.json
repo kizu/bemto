@@ -1,6 +1,6 @@
 {
   "name": "bemto.pug",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "./lib/index.pug",
   "author": "Roman Komarov <kizu@kizu.ru>",
   "licence": "MIT",
@@ -20,12 +20,17 @@
     "url": "git://github.com/kizu/bemto.git"
   },
   "devDependencies": {
-    "pug": "2.0.0-beta6",
+    "concat-files": "^0.1.1",
     "mocha": "*",
-    "should": "2.0.x"
+    "pug": "2.0.x",
+    "should": "13.2.x"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --require should --reporter list"
+    "test": "./node_modules/.bin/mocha --require should --reporter list",
+    "prepare": "node concat"
   },
-  "engines": { "node": "*" }
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {}
 }
